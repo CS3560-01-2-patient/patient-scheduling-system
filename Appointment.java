@@ -73,7 +73,7 @@ public class Appointment {
 	 * setStatus method
 	 * @param appointmentStatus the status of the appointment
 	 */
-    public void setTime(String appointmentStatus)
+    public void setStatus(String appointmentStatus)
     {
         status = appointmentStatus;
     }
