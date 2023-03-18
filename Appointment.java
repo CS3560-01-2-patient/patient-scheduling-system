@@ -18,7 +18,7 @@ public class Appointment {
 	 * setDate method
 	 * @param date The date of the appointment 
 	 */
-    public String setDate(String appointmentDate)
+    public void setDate(String appointmentDate)
     {
         date = appointmentDate;
     }
@@ -37,7 +37,7 @@ public class Appointment {
 	 * setTime method
 	 * @param time The time of the appointment 
 	 */
-    public String setTime(String appointmentTime)
+    public void setTime(String appointmentTime)
     {
         time = appointmentTime;
     }
@@ -55,7 +55,7 @@ public class Appointment {
 	 * setTreatment method
 	 * @param treat The treatment given from appointment
 	 */
-    public String setTreatment(String treat)
+    public void setTreatment(String treat)
     {
         treatment = treat;
     }
@@ -73,7 +73,7 @@ public class Appointment {
 	 * setStatus method
 	 * @param appointmentStatus the status of the appointment
 	 */
-    public String setTime(String appointmentStatus)
+    public void setTime(String appointmentStatus)
     {
         status = appointmentStatus;
     }

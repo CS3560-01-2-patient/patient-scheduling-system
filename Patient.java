@@ -1,58 +1,58 @@
 public class Patient {
     
-    private string name;
+    private String name;
     private int idNumber;
     private int phoneNumber;
-    private string emailAddress;
+    private String emailAddress;
     private int socialSecurityNumber;
-    private int healthInsuranceNumber
+    private int healthInsuranceNumber;
     
-    public string getPatientName() {
+    public String getPatientName() {
         return name;
     }
     
-    public void setPatientName(string newValue) {
-        name = newValue;
+    public void setPatientName(String patientName) {
+        name = patientName;
     } 
     
-    public string getIdNumber() {
+    public String getIdNumber() {
         return idNumber;
     }
     
-    public void setIdNumber(int newValue) {
-        idNumber = newValue;
+    public void setIdNumber(int patientID) {
+        idNumber = patientID;
     }   
     
-    public string getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
     
-    public void setPhoneNumber(int newValue) {
-        phoneNumber = newValue;
+    public void setPhoneNumber(int patientPhoneNum) {
+        phoneNumber = patientPhoneNum;
     }    
     
-    public string getEmailAddress() {
+    public String getEmailAddress() {
         return emailAddress;
     }
     
-    public void setEmailAddress(string newValue) {
-        emailAddress = newValue;
+    public void setEmailAddress(String patientEmail) {
+        emailAddress = patientEmail;
     }    
     
-    public string getSocialSecurityNumber() {
+    public String getSocialSecurityNumber() {
         return socialSecurityNumber;
     }
     
-    public void setSocialSecurityNumber(int newValue) {
-        socialSecurityNumber = newValue;
+    public void setSocialSecurityNumber(int ssn) {
+        socialSecurityNumber = ssn;
     }    
     
-    public string getHealthInsuranceNumber() {
+    public String getHealthInsuranceNumber() {
         return healthInsuranceNumber;
     }
     
-    public void setHealthInsuranceNumber(int newValue) {
-        healthInsuranceNumber = newValue;
+    public void setHealthInsuranceNumber(int insuranceID) {
+        healthInsuranceNumber = insuranceID;
     }
     
 }
