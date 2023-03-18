@@ -11,7 +11,7 @@ public class Patient {
         return name;
     }
     
-    public void setPatientName() {
+    public void setPatientName(string newValue) {
         name = newValue;
     } 
     
@@ -19,7 +19,7 @@ public class Patient {
         return idNumber;
     }
     
-    public void setIdNumber() {
+    public void setIdNumber(int newValue) {
         idNumber = newValue;
     }   
     
@@ -27,7 +27,7 @@ public class Patient {
         return phoneNumber;
     }
     
-    public void setPhoneNumber() {
+    public void setPhoneNumber(int newValue) {
         phoneNumber = newValue;
     }    
     
@@ -35,7 +35,7 @@ public class Patient {
         return emailAddress;
     }
     
-    public void setEmailAddress() {
+    public void setEmailAddress(string newValue) {
         emailAddress = newValue;
     }    
     
@@ -43,7 +43,7 @@ public class Patient {
         return socialSecurityNumber;
     }
     
-    public void setSocialSecurityNumber() {
+    public void setSocialSecurityNumber(int newValue) {
         socialSecurityNumber = newValue;
     }    
     
@@ -51,7 +51,7 @@ public class Patient {
         return healthInsuranceNumber;
     }
     
-    public void setHealthInsuranceNumber() {
+    public void setHealthInsuranceNumber(int newValue) {
         healthInsuranceNumber = newValue;
     }
     
