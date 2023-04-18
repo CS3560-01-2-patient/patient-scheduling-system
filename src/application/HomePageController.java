@@ -16,6 +16,9 @@ public class HomePageController implements Initializable {
 	private Button logoutButton;
 	
 	@FXML
+	private Button appointmentButton; 
+	
+	@FXML
 	private Label nameLabel;
 	
 	@FXML 
@@ -47,7 +50,17 @@ public class HomePageController implements Initializable {
 			}
 		});
 		
+		appointmentButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				DBUtils.changeScene(event, "Appointment.fxml", "Schedule Appointment", null, null, null, null, null, null, null);
+			}
+		});
+		
+		
 	}
+	
+	
 	
 	public void setUserInfo(String name, String email, String username, String password, String phone, String dateOfBirth, String gender) {
 		nameLabel.setText("Name: " +  name);

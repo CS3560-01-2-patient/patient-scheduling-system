@@ -16,7 +16,7 @@
                   <Font name="Verdana" size="55.0" />
                </font>
             </Text>
-            <Button layoutX="667.0" layoutY="17.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="178.0" text="Schedule Appointment">
+            <Button fx:id="appointmentButton" layoutX="667.0" layoutY="17.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="178.0" text="Schedule Appointment">
                <font>
                   <Font size="15.0" />
                </font>
