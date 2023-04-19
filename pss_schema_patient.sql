@@ -46,6 +46,41 @@ INSERT INTO `patient` VALUES (10,'John Wick','wicked@gmail.com','babayaga','para
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+DROP TABLE IF EXISTS `physician`;
+CREATE TABLE `physician` (
+  `physician_id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  `phoneNumber` varchar(45) DEFAULT NULL,
+  `gender` varchar(45) DEFAULT NULL,
+  `specialty` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`physician_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+DROP TABLE IF EXISTS `appointment`;
+CREATE TABLE `appointment` (
+  `appointment_id` int NOT NULL AUTO_INCREMENT,
+  `patient_id` int DEFAULT NULL,
+  `physician_id` int DEFAULT NULL,
+  `appointment_date` DATE DEFAULT NULL, -- stored as YYYY-MM-DD
+  `appontment_time` Time(0) DEFAULT NULL, -- stored as hh:mm
+  `status` varchar(45) DEFAULT NULL, --  scheduled/cancelled/completed
+  `treatment` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`appointment_id`),
+  FOREIGN KEY (`patient_id`) REFERENCES `patient`(`patient_id`),
+  FOREIGN KEY (`physician_id`) REFERENCES `physician`(`physician_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+
+
+
+
+
+
+
+
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
