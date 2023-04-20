@@ -42,7 +42,7 @@ CREATE TABLE `patient` (
 LOCK TABLES `patient` WRITE;
 /*!40000 ALTER TABLE `patient` DISABLE KEYS */;
 INSERT INTO `patient` VALUES (10,'John Wick','wicked@gmail.com','babayaga','parabellum','911','2008-04-02','Male'),(11,'Brandon','bro@gmail.com','dude','lame','90394-33425','2023-04-06','Male'),(12,'spongebob squarepants','squarepants@gmail.com','Spongebob','krustykrab','818-4859-3914','2023-04-05','Other');
-/*!40000 ALTER TABLE `patient` ENABLE KEYS */;
+/*!40000 ALTER TABLE `patient` ENABLE KEYS */; -- Test patients to make sure that the tables are being filled properly
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -62,24 +62,14 @@ CREATE TABLE `appointment` (
   `appointment_id` int NOT NULL AUTO_INCREMENT,
   `patient_id` int DEFAULT NULL,
   `physician_id` int DEFAULT NULL,
-  `appointment_date` DATE DEFAULT NULL, -- stored as YYYY-MM-DD
-  `appontment_time` Time(0) DEFAULT NULL, -- stored as hh:mm
+  `appointment_date` varchar(45) DEFAULT NULL, -- stored as YYYY-MM-DD
+  `appontment_time` varchar(45) DEFAULT NULL, -- stored as hh:mm
   `status` varchar(45) DEFAULT NULL, --  scheduled/cancelled/completed
   `treatment` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`appointment_id`),
-  FOREIGN KEY (`patient_id`) REFERENCES `patient`(`patient_id`),
+  FOREIGN KEY (`patient_id`) REFERENCES `patient`(`patient_id`), -- In addition to having a unique identifier the appointment needs to keep track of which patiend and physician it refers to.
   FOREIGN KEY (`physician_id`) REFERENCES `physician`(`physician_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-
-
-
-
-
-
-
-
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
