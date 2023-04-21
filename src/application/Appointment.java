@@ -7,7 +7,6 @@ public class Appointment {
     private Physician physician;
     private String appointment_Date;
     private String appointment_Time;
-    private String status;
     private String treatment;
     
     // Appointment constructors
@@ -24,7 +23,6 @@ public class Appointment {
         this.physician = physician;
         this.appointment_Date = appointmentDate;
         this.appointment_Time = appointmentTime;
-        this.status = status;
         this.treatment = treatment;
     }
     
@@ -70,14 +68,6 @@ public class Appointment {
         this.appointment_Time = appointmentTime;
     }
     
-    public String getStatus() {
-        return status;
-    }
-    
-    public void setStatus(String status) {
-        this.status = status;
-    }
-    
     public String getTreatment() {
         return treatment;
     }
@@ -90,14 +80,13 @@ public class Appointment {
     public void insertIntoDatabase() {
 		   try {
 			   Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pss_schema", "root", "mypassword");
-			   PreparedStatement stmt = connection.prepareStatement("INSERT INTO appointment (appointment_id, patient_id, physician_id, appointment_date, appointment_time, status, treatment) VALUES (?, ?, ?, ?, ?, ?, ?)"); {
+			   PreparedStatement stmt = connection.prepareStatement("INSERT INTO appointment (appointment_id, patient_id, physician_id, appointment_date, appointment_time, treatment) VALUES (?, ?, ?, ?, ?, ?, ?)"); {
 			         stmt.setInt(1, appointment_id);
 			         stmt.setInt(2, patient.getPatientId());
 			         stmt.setInt(3, physician.getPhysicianId());
 			         stmt.setString(4, appointment_Date);
 			         stmt.setString(5, appointment_Time);
-			         stmt.setString(6, status);
-			         stmt.setString(7, treatment);
+			         stmt.setString(6, treatment);
 			   }
 			   		 stmt.executeUpdate(); // makes sure that the database gets updated
 			   }
@@ -113,7 +102,7 @@ public class Appointment {
    		try {
    			// Establishes connection to the database and retrieves the information for the specific appointment
    			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pss_schema", "root", "mypassword");
-	        String query = "SELECT appointment_id, patient_id, physician_id, appointment_date, appointment_time, status, treatment FROM appointment WHERE appointment_id = ?";
+	        String query = "SELECT appointment_id, patient_id, physician_id, appointment_date, appointment_time, treatment FROM appointment WHERE appointment_id = ?";
 	        PreparedStatement stmt = connection.prepareStatement(query);
 	        stmt.setInt(1, appointment_Id);
 	        ResultSet rs = stmt.executeQuery();
@@ -125,7 +114,7 @@ public class Appointment {
 	            this.physician = phys;
 	            this.appointment_Date = rs.getString("appointment_date");
 	            this.appointment_Time = rs.getString("appointment_time");
-	            this.status = rs.getString("status");
+
 	            this.treatment = rs.getString("treatment");
 	        }
    			
