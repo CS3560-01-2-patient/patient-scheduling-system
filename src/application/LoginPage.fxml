@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Main">
+   <children>
+      <AnchorPane fx:id="main_form" prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <AnchorPane fx:id="createAccount_form" prefHeight="400.0" prefWidth="300.0">
+               <children>
+                  <Text layoutX="53.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create Account">
+                     <font>
+                        <Font name="Verdana" size="25.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="ca_username" layoutX="41.0" layoutY="151.0" prefHeight="30.0" prefWidth="220.0" promptText="Username" />
+                  <PasswordField fx:id="ca_password" layoutX="40.0" layoutY="192.0" prefHeight="30.0" prefWidth="220.0" promptText="Password" />
+                  <Button fx:id="ca_createAccountButton" layoutX="39.0" layoutY="346.0" mnemonicParsing="false" onAction="#createAccount" prefHeight="40.0" prefWidth="220.0" text="Create Account" />
+                  <TextField fx:id="ca_name" layoutX="41.0" layoutY="72.0" prefHeight="30.0" prefWidth="220.0" promptText="Name" />
+                  <TextField fx:id="ca_email" layoutX="41.0" layoutY="113.0" prefHeight="30.0" prefWidth="220.0" promptText="Email" />
+                  <DatePicker fx:id="ca_dob" layoutX="40.0" layoutY="270.0" prefHeight="30.0" prefWidth="220.0" promptText="Date of Birth" />
+                  <RadioButton fx:id="ca_maleRB" layoutX="88.0" layoutY="310.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="48.0" selected="true" text="Male">
+                     <font>
+                        <Font size="11.0" />
+                     </font></RadioButton>
+                  <RadioButton fx:id="ca_femaleRB" layoutX="142.0" layoutY="310.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="68.0" text="Female">
+                     <font>
+                        <Font size="11.0" />
+                     </font></RadioButton>
+                  <RadioButton fx:id="ca_otherRB" layoutX="206.0" layoutY="310.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="54.0" text="Other">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </RadioButton>
+                  <Text layoutX="41.0" layoutY="324.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gender:" />
+                  <TextField fx:id="ca_phoneNum" layoutX="39.0" layoutY="231.0" prefHeight="30.0" prefWidth="220.0" promptText="Phone Number" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="login_form" layoutX="10.0" layoutY="10.0" prefHeight="400.0" prefWidth="300.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Text layoutX="105.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sign In">
+                     <font>
+                        <Font name="Verdana" size="25.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="si_usernameTextField" layoutX="50.0" layoutY="175.0" prefHeight="35.0" prefWidth="220.0" promptText="Username" />
+                  <PasswordField fx:id="si_passwordTextField" layoutX="50.0" layoutY="221.0" prefHeight="35.0" prefWidth="220.0" promptText="Password" />
+                  <Button fx:id="si_loginButton" layoutX="50.0" layoutY="277.0" mnemonicParsing="false" onAction="#login" prefHeight="40.0" prefWidth="220.0" text="Login" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="sub_form" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: red;">
+               <children>
+                  <Text fill="WHITE" layoutX="56.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient Account System">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fill="WHITE" layoutX="41.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome!">
+                     <font>
+                        <Font size="49.0" />
+                     </font>
+                  </Text>
+                  <Button fx:id="sub_signupBtn" layoutX="61.0" layoutY="339.0" mnemonicParsing="false" onAction="#createAccountSlider" prefHeight="40.0" prefWidth="177.0" text="Create Account" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="61.0" AnchorPane.rightAnchor="61.400000000000006" AnchorPane.topAnchor="339.0" />
+                  <Button fx:id="sub_loginBtn" layoutX="71.0" layoutY="349.0" mnemonicParsing="false" onAction="#loginSlider" prefHeight="40.0" prefWidth="177.0" text="Sign In" visible="false" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="61.0" AnchorPane.rightAnchor="61.400000000000006" AnchorPane.topAnchor="339.0" />
+                  <Text fx:id="edit_label" fill="WHITE" layoutX="72.0" layoutY="325.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Don't have an account?">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="35.0" prefWidth="600.0">
+               <children>
+                  <Button fx:id="closeButton" layoutX="540.0" layoutY="9.0" mnemonicParsing="false" onAction="#close" prefHeight="26.0" prefWidth="34.0" text="X" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>
