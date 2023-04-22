@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 public class Database {
 	public static Connection connectDB() {
 		try {
-			Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/pss_schema", "root", "mypassword");
+			Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/pss_schema_patient", "root", "mypassword");
 			return connect;
 			
 		}

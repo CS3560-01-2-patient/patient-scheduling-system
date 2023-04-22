@@ -56,35 +56,35 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane fx:id="appointment_form" layoutX="175.0" layoutY="104.0" prefHeight="565.0" prefWidth="880.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="appointment_form" layoutX="175.0" layoutY="104.0" prefHeight="565.0" prefWidth="880.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="528.0" prefWidth="304.0" style="-fx-background-color: skyblue;">
+                              <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="528.0" prefWidth="841.0" style="-fx-background-color: skyblue;">
                                  <children>
-                                    <Text layoutX="27.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient ID">
+                                    <Text layoutX="31.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient ID">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Text>
-                                    <TextField fx:id="appointment_patientID" layoutX="27.0" layoutY="68.0" promptText="Patient ID" />
-                                    <Text layoutX="29.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Date" wrappingWidth="74.521484375">
+                                    <TextField fx:id="appointment_patientID" layoutX="31.0" layoutY="32.0" promptText="Patient ID" />
+                                    <Text layoutX="34.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Date" wrappingWidth="74.521484375">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Text>
-                                    <TextArea fx:id="appointment_treatment" layoutX="27.0" layoutY="285.0" prefHeight="72.0" prefWidth="211.0" promptText="Treatment" />
-                                    <Text layoutX="29.0" layoutY="206.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Time" wrappingWidth="74.6220703125">
+                                    <TextArea fx:id="appointment_treatment" layoutX="31.0" layoutY="283.0" prefHeight="72.0" prefWidth="211.0" promptText="Treatment" />
+                                    <Text layoutX="33.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Time" wrappingWidth="74.6220703125">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Text>
-                                    <ChoiceBox fx:id="appointment_time" layoutX="27.0" layoutY="211.0" prefWidth="150.0" />
-                                    <Text layoutX="26.0" layoutY="279.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Treatment">
+                                    <ChoiceBox fx:id="appointment_time" layoutX="31.0" layoutY="162.0" prefWidth="150.0" />
+                                    <Text layoutX="33.0" layoutY="279.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Treatment" wrappingWidth="74.4375">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Text>
-                                    <DatePicker fx:id="appointment_date" layoutX="26.0" layoutY="139.0" prefHeight="25.0" prefWidth="151.0" promptText="Appointment Date" />
-                                    <Button fx:id="appointment_createBtn" layoutX="26.0" layoutY="386.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="145.0" text="Create Appointment">
+                                    <DatePicker fx:id="appointment_date" layoutX="31.0" layoutY="95.0" prefHeight="25.0" prefWidth="151.0" promptText="Appointment Date" />
+                                    <Button fx:id="appointment_createBtn" layoutX="26.0" layoutY="386.0" mnemonicParsing="false" onAction="#createAppointmentBtn" prefHeight="35.0" prefWidth="145.0" text="Create Appointment">
                                        <font>
                                           <Font size="13.0" />
                                        </font>
@@ -99,20 +99,13 @@
                                           <Font size="13.0" />
                                        </font>
                                     </Button>
-                                 </children>
-                              </AnchorPane>
-                              <AnchorPane layoutX="341.0" layoutY="14.0" prefHeight="528.0" prefWidth="530.0" style="-fx-background-color: skyblue;">
-                                 <children>
-                                    <TableView fx:id="appointment_tableView" layoutX="18.0" layoutY="13.0" prefHeight="503.0" prefWidth="495.0">
-                                      <columns>
-                                        <TableColumn fx:id="appointment_col_appID" prefWidth="96.0" text="Appointment ID" />
-                                        <TableColumn fx:id="appointment_col_patientID" prefWidth="69.0" text="Patient ID" />
-                                          <TableColumn fx:id="appointment_col_physcID" prefWidth="81.0" text="Physician ID" />
-                                          <TableColumn fx:id="appointment_col_date" prefWidth="69.0" text="date" />
-                                          <TableColumn fx:id="appointment_col_time" prefWidth="75.0" text="time" />
-                                          <TableColumn fx:id="appointment_col_treatment" prefWidth="104.0" text="treatment" />
-                                      </columns>
-                                    </TableView>
+                                    <ChoiceBox fx:id="appointment_physician" layoutX="31.0" layoutY="223.0" prefWidth="150.0" />
+                                    <Text layoutX="32.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Physician" wrappingWidth="114.6220703125">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                    <Button layoutX="230.0" layoutY="484.0" mnemonicParsing="false" onAction="#appointmentClearBtn" prefHeight="25.0" prefWidth="60.0" text="Clear" />
                                  </children>
                               </AnchorPane>
                            </children>

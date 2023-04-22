@@ -3,18 +3,18 @@ import java.sql.*;
 
 public class Appointment {
     private int appointment_id;
-    private Patient patient;
-    private Physician physician;
-    private String appointment_Date;
-    private String appointment_Time;
+    private int patient_id;
+    private int physician_id;
+    private String appointment_date;
+    private String appointment_time;
     private String treatment;
 
-    public Appointment(int appointmentId, Patient patient, Physician physician, String appointmentDate, String appointmentTime, String status, String treatment) {
+    public Appointment(int appointmentId, int patient_id, int physician_id, String appointment_date, String appointment_time, String treatment) {
         this.appointment_id = appointmentId;
-        this.patient = patient;
-        this.physician = physician;
-        this.appointment_Date = appointmentDate;
-        this.appointment_Time = appointmentTime;
+        this.patient_id = patient_id;
+        this.physician_id = physician_id;
+        this.appointment_date = appointment_date;
+        this.appointment_time = appointment_time;
         this.treatment = treatment;
     }
 
@@ -24,22 +24,22 @@ public class Appointment {
         return appointment_id;
     }
 
-    public Patient getPatient() {
-        return patient;
+    public int getPatientId() {
+        return patient_id;
     }
 
 
-    public Physician getPhysician() {
-        return physician;
+    public int getPhysicianId() {
+        return physician_id;
     }
 
     public String getAppointmentDate() {
-        return appointment_Date;
+        return appointment_date;
     }
 
 
     public String getAppointmentTime() {
-        return appointment_Time;
+        return appointment_time;
     }
 
 

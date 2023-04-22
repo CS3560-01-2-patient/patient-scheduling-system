@@ -111,7 +111,7 @@ public class Main extends Application {
 	}
 	
     public void login() {
-    	String sql = "SELECT * FROM patient where username = ? and password = ?";
+    	String sql = "SELECT * FROM patient WHERE username = ? and password = ?";
     	connect = Database.connectDB();
     	
     	try {
