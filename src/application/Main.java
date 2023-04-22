@@ -134,7 +134,15 @@ public class Main extends Application {
     				alert.setTitle("Information Message");
     				alert.setHeaderText(null);
     				alert.setContentText("You have logged in!");
-    				alert.showAndWait();			
+    				alert.showAndWait();	
+    				
+    				si_loginButton.getScene().getWindow().hide();
+    				
+    				Parent root = FXMLLoader.load(getClass().getResource("HomePage.fxml"));
+    				Stage stage = new Stage();
+    				Scene scene = new Scene(root);
+    				stage.setScene(scene);
+    				stage.show();
     			}
     			else {
     	 			alert = new Alert(AlertType.ERROR);
