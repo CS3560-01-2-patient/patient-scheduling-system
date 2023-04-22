@@ -1,8 +1,203 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
-</AnchorPane>
 
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <BorderPane layoutX="160.0" layoutY="86.0" prefHeight="600.0" prefWidth="1100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <top>
+                  <AnchorPane prefHeight="35.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <AnchorPane layoutX="37.0" layoutY="-82.0" prefHeight="118.0" prefWidth="1100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <Button layoutX="371.0" layoutY="9.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="59.0" text="Close" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0" />
+                              <Text layoutX="7.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient Scheduling System">
+                                 <font>
+                                    <Font name="Verdana" size="15.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+               </top>
+               <left>
+                  <AnchorPane prefHeight="200.0" prefWidth="220.0" style="-fx-background-color: red;" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button layoutX="32.0" layoutY="283.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="157.0" text="Add Appointment" />
+                        <Button layoutX="31.0" layoutY="231.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="157.0" text="View Profile" />
+                        <Text fill="WHITE" layoutX="39.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome!">
+                           <font>
+                              <Font size="32.0" />
+                           </font>
+                        </Text>
+                        <Text fill="WHITE" layoutX="79.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Text>
+                        <Button layoutX="14.0" layoutY="526.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="60.0" text="Log Out" />
+                     </children>
+                  </AnchorPane>
+               </left>
+               <center>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <AnchorPane layoutX="175.0" layoutY="104.0" prefHeight="565.0" prefWidth="880.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="528.0" prefWidth="304.0" style="-fx-background-color: skyblue;">
+                                 <children>
+                                    <Text layoutX="27.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient ID">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField layoutX="27.0" layoutY="68.0" />
+                                    <Text layoutX="29.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Date" wrappingWidth="74.521484375">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                    <TextArea layoutX="27.0" layoutY="285.0" prefHeight="72.0" prefWidth="211.0" />
+                                    <Text layoutX="29.0" layoutY="206.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Time" wrappingWidth="74.6220703125">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                    <ChoiceBox layoutX="27.0" layoutY="211.0" prefWidth="150.0" />
+                                    <Text layoutX="26.0" layoutY="279.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Treatment">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                    <DatePicker layoutX="26.0" layoutY="139.0" prefHeight="25.0" prefWidth="151.0" />
+                                    <Button layoutX="26.0" layoutY="387.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="145.0" text="Create Appointment">
+                                       <font>
+                                          <Font size="13.0" />
+                                       </font>
+                                    </Button>
+                                    <Button layoutX="19.0" layoutY="470.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="129.0" text="Delete Appointment" />
+                                    <Button layoutX="161.0" layoutY="470.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="129.0" text="Update Appointment" />
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane layoutX="341.0" layoutY="14.0" prefHeight="528.0" prefWidth="530.0" style="-fx-background-color: skyblue;">
+                                 <children>
+                                    <TableView layoutX="18.0" layoutY="13.0" prefHeight="503.0" prefWidth="495.0">
+                                      <columns>
+                                        <TableColumn prefWidth="96.0" text="Appointment ID" />
+                                        <TableColumn prefWidth="69.0" text="Patient ID" />
+                                          <TableColumn prefWidth="81.0" text="Physician ID" />
+                                          <TableColumn prefWidth="69.0" text="date" />
+                                          <TableColumn prefWidth="75.0" text="time" />
+                                          <TableColumn prefWidth="104.0" text="treatment" />
+                                      </columns>
+                                    </TableView>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="150.0" layoutY="140.0" prefHeight="565.0" prefWidth="880.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <AnchorPane layoutX="22.0" layoutY="14.0" prefHeight="200.0" prefWidth="823.0" style="-fx-background-color: skyblue;">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="25.0" text="Patient ID:">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField layoutX="84.0" layoutY="23.0" promptText="Patient ID" />
+                                    <Label layoutX="36.0" layoutY="66.0" text="Name:">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField layoutX="84.0" layoutY="64.0" promptText="Name" />
+                                    <TextField layoutX="84.0" layoutY="101.0" promptText="Email" />
+                                    <Label layoutX="38.0" layoutY="103.0" text="Email:">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField layoutX="358.0" layoutY="23.0" promptText="Username" />
+                                    <Label layoutX="284.0" layoutY="25.0" text="Username:">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="286.0" layoutY="66.0" text="Password:">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField layoutX="358.0" layoutY="64.0" promptText="Password" />
+                                    <ChoiceBox layoutX="638.0" layoutY="101.0" prefWidth="150.0" />
+                                    <TextField layoutX="638.0" layoutY="24.0" promptText="Phone Number" />
+                                    <Label layoutX="535.0" layoutY="26.0" text="Phone Number:">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <DatePicker layoutX="637.0" layoutY="64.0" prefHeight="25.0" prefWidth="151.0" promptText="Date of Birth" />
+                                    <Label layoutX="546.0" layoutY="67.0" text="Date of Birth: ">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="584.0" layoutY="104.0" text="Gender:">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Button layoutX="433.0" layoutY="155.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="83.0" text="Update">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Button>
+                                    <Button layoutX="294.0" layoutY="155.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="83.0" text="Delete">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane layoutX="22.0" layoutY="239.0" prefHeight="302.0" prefWidth="823.0" style="-fx-background-color: skyblue;">
+                                 <children>
+                                    <TableView layoutX="13.0" layoutY="14.0" prefHeight="274.0" prefWidth="797.0">
+                                      <columns>
+                                        <TableColumn prefWidth="75.0" text="Patient ID" />
+                                        <TableColumn prefWidth="75.0" text="Name" />
+                                          <TableColumn prefWidth="127.0" text="Email" />
+                                          <TableColumn prefWidth="98.0" text="Username" />
+                                          <TableColumn prefWidth="111.0" text="Password" />
+                                          <TableColumn prefWidth="125.0" text="Phone Number" />
+                                          <TableColumn prefWidth="79.0" text="Date of Birth" />
+                                          <TableColumn prefWidth="106.0" text="Gender" />
+                                      </columns>
+                                    </TableView>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+               </center>
+            </BorderPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>
