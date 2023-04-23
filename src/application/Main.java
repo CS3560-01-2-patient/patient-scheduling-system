@@ -124,12 +124,30 @@ public class Main extends Application {
     			alert = new Alert(AlertType.ERROR);
     			alert.setTitle("Error Message");
     			alert.setHeaderText(null);
-    			alert.setContentText("Please fill all blank fields");
+    			alert.setContentText("Please enter your username and password");
     			alert.showAndWait();
     		}
     		else {
     			if(result.next()) {
+    				FXMLLoader loader = new FXMLLoader(getClass().getResource("HomePage.fxml"));
+    				Parent root = loader.load();
+    				HomePage homepage = loader.getController();
     				
+    	 			String sql1 = "SELECT * FROM patient WHERE username = ?";	
+	    			prepare = connect.prepareStatement(sql1);
+	        		prepare.setString(1, si_usernameTextField.getText());
+	        		result = prepare.executeQuery();
+	        		while(result.next()) {
+	        			int patient_id = result.getInt("patient_id");
+	        			String name = result.getString("name");
+	        			String email = result.getString("email");
+	        			String username = result.getString("username");
+	        			String password = result.getString("password");
+	        			String phoneNumber = result.getString("phoneNumber");
+	        			String dateOfBirth = result.getString("dateOfBirth");
+	        			String gender= result.getString("gender");
+		        		homepage.setUserInfo(patient_id, name, email, username, password, phoneNumber, dateOfBirth, gender);	
+	        		}
     				alert = new Alert(AlertType.INFORMATION);
     				alert.setTitle("Information Message");
     				alert.setHeaderText(null);
@@ -137,8 +155,9 @@ public class Main extends Application {
     				alert.showAndWait();	
     				
     				si_loginButton.getScene().getWindow().hide();
-    				
-    				Parent root = FXMLLoader.load(getClass().getResource("HomePage.fxml"));
+	   
+	        		
+    				//Parent root = FXMLLoader.load(getClass().getResource("HomePage.fxml"));
     				Stage stage = new Stage();
     				Scene scene = new Scene(root);
     				stage.setScene(scene);
@@ -174,7 +193,7 @@ public class Main extends Application {
 			String gender = ((RadioButton) toggleGroup.getSelectedToggle()).getText();
     		if(ca_name.getText().isEmpty() || ca_email.getText().isEmpty() || ca_username.getText().isEmpty() || ca_password.getText().isEmpty() || ca_email.getText().isEmpty() || ca_phoneNum.getText().isEmpty() || date == null) { 
     			alert = new Alert(AlertType.ERROR);
-    			alert.setTitle("Error ");
+    			alert.setTitle("Error");
     			alert.setContentText("Please fill all blank fields");	
     			alert.showAndWait();
     		}
@@ -201,9 +220,10 @@ public class Main extends Application {
         			prepare.setString(6, dateOfBirth);
         			prepare.setString(7, gender);
         			    			
+        			
         			alert = new Alert(AlertType.INFORMATION);
-        			alert.setTitle("Information Message");
-        			alert.setContentText("Success! You have created a new accont!");
+        			alert.setTitle("Account Created");
+        			alert.setContentText("Success! You have created a new account!");
         			alert.showAndWait();
 
         			prepare.executeUpdate();

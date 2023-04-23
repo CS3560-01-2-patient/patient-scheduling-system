@@ -22,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -33,23 +34,33 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class HomePage implements Initializable{
+   
     @FXML
-    private TableView<Appointment> appointment_tableView;
+    private Label patientIdLabel;
     
     @FXML
-    private TableColumn<Appointment, Integer> appointment_col_patientID;
-
-    @FXML
-    private TableColumn<Appointment, Integer> appointment_col_physcID;
+    private Label nameLabel;
     
     @FXML
-    private TableColumn<Appointment, String> appointment_col_date;
+    private Label emailLabel;
+    
+    @FXML
+    private Label usernameLabel;
+    
+    @FXML
+    private Label passwordLabel;
 
     @FXML
-    private TableColumn<Appointment, String> appointment_col_time;
+    private Label phoneNumLabel;
+    
+    @FXML
+    private Label dobLabel;
 
     @FXML
-    private TableColumn<Appointment, String> appointment_col_treatment;
+    private Label genderLabel;
+    
+    @FXML
+    private AnchorPane userInfo_form;
     
     @FXML
     private Button appointment_createBtn;
@@ -65,7 +76,6 @@ public class HomePage implements Initializable{
 
     @FXML
     private TextField appointment_patientID;
-
 
     @FXML
     private ChoiceBox<?> appointment_time;
@@ -149,11 +159,14 @@ public class HomePage implements Initializable{
     private TextField profile_username;
 	
     @FXML
-    private Button profileBtn;
+    private Button editProfileBtn;
     
     @FXML
     private Button appointmentBtn;
     
+    @FXML
+    private Button viewProfileBtn;
+     
     
     private String gender[] = {"Male", "Female", "Other"};
     private String appointmentTime[]  = {"9:00AM", "10:00AM", "11:00AM", "12:00PM", "1:00PM", "2:00PM", "3:00PM", "4:00PM", "5:00PM"};
@@ -167,7 +180,6 @@ public class HomePage implements Initializable{
     
     public void createAppointmentBtn() {
     	String sql = "INSERT INTO appointment (patient_id, physician_id, appointment_date, appointment_time, treatment) VALUES (?, ?, ?, ?, ?)";
-    	
     	connect = Database.connectDB();
     	
     	try {
@@ -227,7 +239,6 @@ public class HomePage implements Initializable{
     
     public int getPhysicianID() {
     	String sql = "SELECT physician_id FROM physician WHERE name = ?";
-    	connect = Database.connectDB();
 		try {
 			prepare = connect.prepareStatement(sql);
     		prepare.setString(1, (String)appointment_physician.getSelectionModel().getSelectedItem());
@@ -258,13 +269,22 @@ public class HomePage implements Initializable{
     	if(event.getSource() == appointmentBtn) {
     		appointment_form.setVisible(true);
     		profile_form.setVisible(false);
+    		userInfo_form.setVisible(false);
     		
     		appointmentTimeList();
     	}
-    	else if(event.getSource() == profileBtn) {
+    	else if(event.getSource() == editProfileBtn) {
     		profile_form.setVisible(true);
     		appointment_form.setVisible(false);
+    		userInfo_form.setVisible(false);
     	}
+    	else if(event.getSource() == viewProfileBtn) {
+    		userInfo_form.setVisible(true);
+    		profile_form.setVisible(false);
+    		appointment_form.setVisible(false);
+    		
+    	}
+    	
     }
     
     public void logout() throws IOException {
@@ -308,6 +328,17 @@ public class HomePage implements Initializable{
     	ObservableList listData = FXCollections.observableArrayList(physicianList);
     	appointment_physician.setItems(listData);
     }
+    
+	public void setUserInfo(int patientID, String name, String email, String username, String password, String phone, String dateOfBirth, String gender) {
+		patientIdLabel.setText("ID: " + String.valueOf(patientID) );
+		nameLabel.setText("Name: " +  name);
+		emailLabel.setText("Email: " +  email);
+		usernameLabel.setText("Username: " +  username);
+		passwordLabel.setText("Password: " +  password);
+		phoneNumLabel.setText("Phone Number: " +  phone);
+		dobLabel.setText("Date of Birth: " +  dateOfBirth);
+		genderLabel.setText("Gender: " +  gender);	
+	}
     
     public void close() {
     	javafx.application.Platform.exit();
