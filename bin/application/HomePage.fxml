@@ -4,10 +4,10 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
@@ -72,7 +72,7 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Text>
-                                    <TextArea fx:id="appointment_treatment" layoutX="31.0" layoutY="283.0" prefHeight="72.0" prefWidth="211.0" promptText="Treatment" />
+                                    <TextArea fx:id="appointment_treatment" layoutX="31.0" layoutY="283.0" prefHeight="72.0" prefWidth="288.0" promptText="Treatment" />
                                     <Text layoutX="33.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Time" wrappingWidth="74.6220703125">
                                        <font>
                                           <Font size="14.0" />
@@ -85,17 +85,17 @@
                                        </font>
                                     </Text>
                                     <DatePicker fx:id="appointment_date" layoutX="31.0" layoutY="95.0" prefHeight="25.0" prefWidth="151.0" promptText="Appointment Date" />
-                                    <Button fx:id="appointment_createBtn" layoutX="26.0" layoutY="386.0" mnemonicParsing="false" onAction="#createAppointmentBtn" prefHeight="35.0" prefWidth="145.0" text="Create Appointment">
+                                    <Button fx:id="appointment_createBtn" layoutX="189.0" layoutY="433.0" mnemonicParsing="false" onAction="#createAppointment" prefHeight="35.0" prefWidth="145.0" text="Create Appointment">
                                        <font>
                                           <Font size="13.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="appointment_updateBtn" layoutX="26.0" layoutY="433.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="145.0" text="Update Appointment">
+                                    <Button fx:id="appointment_updateBtn" layoutX="31.0" layoutY="479.0" mnemonicParsing="false" onAction="#updateAppointment" prefHeight="35.0" prefWidth="145.0" text="Update Appointment">
                                        <font>
                                           <Font size="13.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="appointment_deleteBtn" layoutX="26.0" layoutY="479.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="145.0" text="Delete Appointment">
+                                    <Button fx:id="appointment_deleteBtn" layoutX="31.0" layoutY="433.0" mnemonicParsing="false" onAction="#deleteAppointment" prefHeight="35.0" prefWidth="145.0" text="Delete Appointment">
                                        <font>
                                           <Font size="13.0" />
                                        </font>
@@ -106,98 +106,92 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Text>
-                                    <Button layoutX="230.0" layoutY="484.0" mnemonicParsing="false" onAction="#appointmentClearBtn" prefHeight="25.0" prefWidth="60.0" text="Clear" />
+                                    <Button layoutX="31.0" layoutY="368.0" mnemonicParsing="false" onAction="#clearAppointment" prefHeight="25.0" prefWidth="60.0" text="Clear" />
+                                    <ImageView fitHeight="362.0" fitWidth="376.0" layoutX="430.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../../Downloads/calendar.png" />
+                                       </image>
+                                    </ImageView>
                                  </children>
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="profile_form" layoutX="150.0" layoutY="140.0" prefHeight="565.0" prefWidth="880.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="profile_form" layoutX="150.0" layoutY="140.0" prefHeight="565.0" prefWidth="880.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <AnchorPane layoutX="22.0" layoutY="14.0" prefHeight="200.0" prefWidth="823.0" style="-fx-background-color: skyblue;">
+                              <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="538.0" prefWidth="848.0" style="-fx-background-color: skyblue;">
                                  <children>
-                                    <Label layoutX="14.0" layoutY="25.0" text="Patient ID:">
+                                    <TextField fx:id="profile_patientID" layoutX="104.0" layoutY="99.0" prefHeight="35.0" prefWidth="265.0" promptText="Patient ID" />
+                                    <TextField fx:id="profile_name" layoutX="388.0" layoutY="99.0" prefHeight="35.0" prefWidth="265.0" promptText="Name" />
+                                    <TextField fx:id="profile_email" layoutX="105.0" layoutY="184.0" prefHeight="35.0" prefWidth="548.0" promptText="Email" />
+                                    <Label layoutX="105.0" layoutY="149.0" text="Email">
                                        <font>
-                                          <Font size="14.0" />
+                                          <Font size="24.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="profile_patientID" layoutX="84.0" layoutY="23.0" promptText="Patient ID" />
-                                    <Label layoutX="36.0" layoutY="66.0" text="Name:">
+                                    <TextField fx:id="profile_username" layoutX="105.0" layoutY="270.0" prefHeight="35.0" prefWidth="265.0" promptText="Username" />
+                                    <TextField fx:id="profile_password" layoutX="395.0" layoutY="270.0" prefHeight="35.0" prefWidth="265.0" promptText="Password" />
+                                    <ChoiceBox fx:id="profile_gender" layoutX="490.0" layoutY="367.0" prefHeight="35.0" prefWidth="170.0" />
+                                    <TextField fx:id="profile_phoneNum" layoutX="108.0" layoutY="367.0" prefHeight="35.0" prefWidth="167.0" promptText="Phone Number" />
+                                    <DatePicker fx:id="profile_dob" layoutX="299.0" layoutY="367.0" prefHeight="35.0" prefWidth="163.0" promptText="Date of Birth" />
+                                    <Button fx:id="profile_updateBtn" layoutX="266.0" layoutY="461.0" mnemonicParsing="false" onAction="#updatePatientInfo" prefHeight="39.0" prefWidth="122.0" text="Update">
                                        <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="profile_name" layoutX="84.0" layoutY="64.0" promptText="Name" />
-                                    <TextField fx:id="profile_email" layoutX="84.0" layoutY="101.0" promptText="Email" />
-                                    <Label layoutX="38.0" layoutY="103.0" text="Email:">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="profile_username" layoutX="358.0" layoutY="23.0" promptText="Username" />
-                                    <Label layoutX="284.0" layoutY="25.0" text="Username:">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <Label layoutX="286.0" layoutY="66.0" text="Password:">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="profile_password" layoutX="358.0" layoutY="64.0" promptText="Password" />
-                                    <ChoiceBox fx:id="profile_gender" layoutX="638.0" layoutY="101.0" prefWidth="150.0" />
-                                    <TextField fx:id="profile_phoneNum" layoutX="638.0" layoutY="24.0" promptText="Phone Number" />
-                                    <Label layoutX="535.0" layoutY="26.0" text="Phone Number:">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <DatePicker fx:id="profile_dob" layoutX="637.0" layoutY="64.0" prefHeight="25.0" prefWidth="151.0" promptText="Date of Birth" />
-                                    <Label layoutX="546.0" layoutY="67.0" text="Date of Birth: ">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <Label layoutX="584.0" layoutY="104.0" text="Gender:">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <Button fx:id="profile_updateBtn" layoutX="433.0" layoutY="155.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="83.0" text="Update">
-                                       <font>
-                                          <Font size="15.0" />
+                                          <Font size="18.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="profile_deleteBtn" layoutX="294.0" layoutY="155.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="83.0" text="Delete">
+                                    <Button fx:id="profile_deleteBtn" layoutX="108.0" layoutY="461.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="122.0" text="Delete">
                                        <font>
-                                          <Font size="15.0" />
+                                          <Font size="18.0" />
                                        </font>
                                     </Button>
-                                 </children>
-                              </AnchorPane>
-                              <AnchorPane layoutX="22.0" layoutY="239.0" prefHeight="302.0" prefWidth="823.0" style="-fx-background-color: skyblue;">
-                                 <children>
-                                    <TableView fx:id="profile_tableView" layoutX="13.0" layoutY="14.0" prefHeight="274.0" prefWidth="797.0">
-                                      <columns>
-                                        <TableColumn fx:id="profile_col_patientID" prefWidth="75.0" text="Patient ID" />
-                                        <TableColumn fx:id="profile_col_name" prefWidth="75.0" text="Name" />
-                                          <TableColumn fx:id="profile_col_email" prefWidth="127.0" text="Email" />
-                                          <TableColumn fx:id="profile_col_username" prefWidth="98.0" text="Username" />
-                                          <TableColumn fx:id="profile_col_password" prefWidth="111.0" text="Password" />
-                                          <TableColumn fx:id="profile_col_phoneNum" prefWidth="125.0" text="Phone Number" />
-                                          <TableColumn fx:id="profile_col_dob" prefWidth="109.0" text="Date of Birth" />
-                                          <TableColumn fx:id="profile_col_gender" prefWidth="76.0" text="Gender" />
-                                      </columns>
-                                    </TableView>
+                                    <Label layoutX="106.0" layoutY="64.0" text="Patient ID">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="390.0" layoutY="64.0" text="Name">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <Text layoutX="104.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Profile" underline="true" wrappingWidth="129.796875">
+                                       <font>
+                                          <Font name="Verdana" size="24.0" />
+                                       </font>
+                                    </Text>
+                                    <Label layoutX="104.0" layoutY="235.0" text="Username">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="394.0" layoutY="235.0" prefHeight="35.0" prefWidth="109.0" text="Password">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="300.0" layoutY="328.0" text="Date of Birth">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="108.0" layoutY="328.0" prefHeight="35.0" prefWidth="170.0" text="Phone Number">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="489.0" layoutY="328.0" text="Gender">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </Label>
                                  </children>
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="userInfo_form" layoutX="108.0" layoutY="56.0" prefHeight="565.0" prefWidth="880.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="userInfo_form" layoutX="108.0" layoutY="56.0" prefHeight="565.0" prefWidth="880.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <AnchorPane layoutX="12.0" layoutY="10.0" prefHeight="545.0" prefWidth="857.0" style="-fx-background-color: skyblue;">
                                  <children>
-                                    <Label fx:id="nameLabel" layoutX="31.0" layoutY="34.0" prefHeight="40.0" prefWidth="276.0" text="Name:">
+                                    <Label fx:id="nameLabel" layoutX="31.0" layoutY="34.0" prefHeight="40.0" prefWidth="560.0" text="Name:">
                                        <font>
                                           <Font size="28.0" />
                                        </font>
@@ -207,17 +201,17 @@
                                           <Font size="28.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="emailLabel" layoutX="31.0" layoutY="102.0" prefHeight="40.0" prefWidth="351.0" text="Email:">
+                                    <Label fx:id="emailLabel" layoutX="31.0" layoutY="102.0" prefHeight="40.0" prefWidth="617.0" text="Email:">
                                        <font>
                                           <Font size="28.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="usernameLabel" layoutX="31.0" layoutY="172.0" prefHeight="40.0" prefWidth="358.0" text="Username:">
+                                    <Label fx:id="usernameLabel" layoutX="31.0" layoutY="172.0" prefHeight="40.0" prefWidth="597.0" text="Username:">
                                        <font>
                                           <Font size="28.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="passwordLabel" layoutX="31.0" layoutY="240.0" prefHeight="40.0" prefWidth="409.0" text="Password:">
+                                    <Label fx:id="passwordLabel" layoutX="31.0" layoutY="240.0" prefHeight="40.0" prefWidth="603.0" text="Password:">
                                        <font>
                                           <Font size="28.0" />
                                        </font>

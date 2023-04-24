@@ -146,7 +146,8 @@ public class Main extends Application {
 	        			String phoneNumber = result.getString("phoneNumber");
 	        			String dateOfBirth = result.getString("dateOfBirth");
 	        			String gender= result.getString("gender");
-		        		homepage.setUserInfo(patient_id, name, email, username, password, phoneNumber, dateOfBirth, gender);	
+		        		homepage.setUserInfo(patient_id, name, email, username, password, phoneNumber, dateOfBirth, gender);
+		        		Patient myPatient = new Patient(patient_id, name, email, username, password, phoneNumber, dateOfBirth, gender);
 	        		}
     				alert = new Alert(AlertType.INFORMATION);
     				alert.setTitle("Information Message");
