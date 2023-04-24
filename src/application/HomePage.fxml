@@ -138,7 +138,7 @@
                                           <Font size="18.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="profile_deleteBtn" layoutX="108.0" layoutY="461.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="122.0" text="Delete">
+                                    <Button fx:id="profile_deleteBtn" layoutX="108.0" layoutY="461.0" mnemonicParsing="false" onAction="#deletePatient" prefHeight="39.0" prefWidth="122.0" text="Delete">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -183,6 +183,7 @@
                                           <Font size="24.0" />
                                        </font>
                                     </Label>
+                                    <Button layoutX="610.0" layoutY="422.0" mnemonicParsing="false" onAction="#clearPatientInfo" prefHeight="25.0" prefWidth="50.0" text="Clear" />
                                  </children>
                               </AnchorPane>
                            </children>

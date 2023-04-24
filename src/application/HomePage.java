@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -20,6 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -416,6 +418,60 @@ public class HomePage implements Initializable{
     		e.printStackTrace();
     	}
     	
+    }
+    
+    public void deletePatient() {
+       	String sql = "DELETE FROM patient where patient_id = '" + profile_patientID.getText() + "'";
+       	connect = Database.connectDB();
+    	try {
+    		if(profile_patientID.getText().isEmpty() || profile_name.getText().isEmpty() || profile_email.getText().isEmpty() 
+    				|| profile_username.getText().isEmpty() || profile_password.getText().isEmpty()  
+    				|| profile_phoneNum.getText().isEmpty() || profile_dob.getValue() == null  
+    				|| profile_gender.getSelectionModel().getSelectedItem() == null) {
+    			Alert alert = new Alert(AlertType.ERROR);
+    			alert.setTitle("Missing fields");
+    			alert.setContentText("Please make sure all fields are not blank");
+    			alert.showAndWait();
+    		}
+    		else {
+    			boolean patientIdExists = false;
+    			String sql1 = "SELECT patient_id FROM patient";
+    			statement = connect.createStatement();
+    			result = statement.executeQuery(sql1);
+    			while(result.next()) {
+    				int patientIdDatabase = result.getInt("patient_id");
+    				if(Integer.parseInt(profile_patientID.getText()) == patientIdDatabase){
+    					patientIdExists = true;
+    					break;
+    				}
+    			}		
+    			if(patientIdExists) {
+    				Alert confirmDeletion = new Alert(AlertType.CONFIRMATION);
+    				confirmDeletion.setContentText("This will permanently delete your account. Would you like to proceed?");
+    				Optional<ButtonType> deleteOption = confirmDeletion.showAndWait();
+    				if(deleteOption.get().equals(ButtonType.OK)) {
+    					prepare = connect.prepareStatement(sql);
+            			prepare.executeUpdate();
+            	   		Alert alert = new Alert(AlertType.INFORMATION);
+        	    		alert.setTitle("Account deleted");
+            			alert.setContentText("You have deleted your account!");
+            			alert.showAndWait();
+            			clearAppointment();			
+    				}
+    			
+    			}
+    			else {
+    				Alert alert = new Alert(AlertType.ERROR);
+    	    		alert.setTitle("Account does not exist");
+        			alert.setContentText("You have not created an account yet!");
+        			alert.showAndWait();
+    			} 	
+    			
+    		}
+    	}
+    	catch (Exception e) {
+    		e.printStackTrace();
+    	}
     }
     
     public void clearPatientInfo() {
