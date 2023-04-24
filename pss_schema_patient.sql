@@ -78,7 +78,7 @@ CREATE TABLE `appointment` (
   `patient_id` int DEFAULT NULL,
   `physician_id` int DEFAULT NULL,
   `appointment_date` varchar(45) DEFAULT NULL, 
-  `appontment_time` varchar(45) DEFAULT NULL, 
+  `appointment_time` varchar(45) DEFAULT NULL, 
   `treatment` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`appointment_id`),
   FOREIGN KEY (`patient_id`) REFERENCES `patient`(`patient_id`), -- In addition to having a unique identifier the appointment needs to keep track of which patiend and physician it refers to.
