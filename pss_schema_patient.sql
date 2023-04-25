@@ -78,7 +78,7 @@ CREATE TABLE `appointment` (
   `patient_id` int DEFAULT NULL,
   `physician_id` int DEFAULT NULL,
   `appointment_date` varchar(45) DEFAULT NULL, 
-  `appontment_time` varchar(45) DEFAULT NULL, 
+  `appointment_time` varchar(45) DEFAULT NULL, 
   `treatment` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`appointment_id`),
   FOREIGN KEY (`patient_id`) REFERENCES `patient`(`patient_id`), -- In addition to having a unique identifier the appointment needs to keep track of which patiend and physician it refers to.
@@ -88,7 +88,7 @@ CREATE TABLE `appointment` (
 -- Adding sample physicians to the table
 LOCK TABLES `appointment` WRITE;
 /*!40000 ALTER TABLE `appointment` DISABLE KEYS */;
-INSERT INTO `appointment` VALUES (1001, 11, 10, '2023-02-03', '09:15:00', 'General Checkup'), (1002, 10, 11, '2023-02-03', '09:15:00', 'General Checkup'), (1003, 12, 12, '2023-02-03', '09:15:00', 'General Checkup');
+INSERT INTO `appointment` VALUES (1001, 11, 10, '2023-07-23', '12:00PM', 'General Checkup'), (1002, 10, 11, '2023-06-12', '3:00PM', 'General Checkup'), (1003, 12, 12, '2023-12-03', '2:00PM', 'General Checkup'), (1004, 12, 10, '2023-04-13', '10:00AM', 'Dental'), (1005, 12, 11, '2022-02-03', '9:00AM', 'Skin');
 /*!40000 ALTER TABLE `appointment` ENABLE KEYS */; -- Test patients to make sure that the tables are being filled properly
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

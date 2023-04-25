@@ -85,11 +85,12 @@ public class Physician {
    	{
    		try {
    			// Establishes connection to the database and retrieves the information for the specific physician
-   			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pss_schema", "root", "mypassword");
-	        String query = "SELECT name, email, phoneNumber, dateOfBirth, gender, specialty FROM physician WHERE physician_id = ?";
+   			Connection connection = Database.connectDB();
+	        String query = "SELECT name, email, phoneNumber, gender, specialty FROM physician WHERE physician_id = ?";
 	        PreparedStatement stmt = connection.prepareStatement(query);
 	        stmt.setInt(1, physicianID);
 	        ResultSet rs = stmt.executeQuery();
+	        this.physicianId = physicianID;
 	        if (rs.next()) {
 	            this.name = rs.getString("name");
 	            this.email = rs.getString("email");

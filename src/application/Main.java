@@ -97,6 +97,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			//Test.go();
 			Parent root = FXMLLoader.load(getClass().getResource("LoginPage.fxml"));
 			primaryStage.setTitle("Patient App");
 			primaryStage.setScene(new Scene(root));

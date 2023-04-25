@@ -1,5 +1,6 @@
 package application;
 import java.sql.*;
+import java.util.*;
 
 public class Patient{
 	// All of the patients attributes
@@ -103,7 +104,7 @@ public class Patient{
 	   
 	   public void insertIntoDatabase() {
 		   try {
-			   Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pss_schema", "root", "mypassword");
+			   Connection connection = Database.connectDB();
 			   PreparedStatement stmt = connection.prepareStatement("INSERT INTO patient (patient_id, name, email, username, password, phone_number, date_of_birth, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"); {
 		             stmt.setInt(1, patientId);
 		             stmt.setString(2, name);
@@ -125,7 +126,7 @@ public class Patient{
 	   
 	   public void updatePatientDatabase(){
 				try {
-					Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pss_schema", "root", "mypassword");
+					Connection connection = Database.connectDB();
 					PreparedStatement selectStmt = connection.prepareStatement("SELECT * FROM patient WHERE patient_id = ?");
 				    selectStmt.setInt(1, this.patientId);
 				    ResultSet rs = selectStmt.executeQuery();
@@ -170,11 +171,12 @@ public class Patient{
 	   	{
 	   		try {
 	   			// Establishes connection to the database and retrieves the information for the specific patient
-	   			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pss_schema", "root", "mypassword");
+	   			Connection connection = Database.connectDB();
 		        String query = "SELECT name, email, username, password, phoneNumber, dateOfBirth, gender FROM patient WHERE patient_id = ?";
 		        PreparedStatement stmt = connection.prepareStatement(query);
 		        stmt.setInt(1, patientID);
 		        ResultSet rs = stmt.executeQuery();
+		        this.patientId = patientID;
 		        if (rs.next()) {
 		            this.name = rs.getString("name");
 		            this.email = rs.getString("email");
@@ -188,6 +190,30 @@ public class Patient{
 	   		}catch(SQLException e) {
 	   			e.printStackTrace();
 	   		}
+	   		
+	   	}
+	   	
+	   	// Method to create a list of all appointments that the current patient is a part of
+	   	// Requires patient_id to be set
+	   	public ArrayList<Integer> getAppointmentIDs()
+	   	{
+	   		Connection connection = Database.connectDB();
+	   		ArrayList<Integer> appointmentIdList = new ArrayList<>();
+	   		try {
+	   			PreparedStatement statement = connection.prepareStatement("SELECT appointment_id FROM appointment WHERE patient_id = ?");
+	   			statement.setInt(1, this.patientId);
+	   			ResultSet resultSet = statement.executeQuery();
+	   			while (resultSet.next()) {
+	   				appointmentIdList.add(resultSet.getInt("appointment_id"));
+	   			}
+	   			resultSet.close();
+	   			statement.close();
+	   			connection.close();
+	   		}catch(SQLException e)
+	   		{
+	   			e.printStackTrace();
+	   		}
+	   		return appointmentIdList;
 	   		
 	   	}
 		   
