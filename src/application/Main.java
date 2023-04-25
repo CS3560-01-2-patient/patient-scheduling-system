@@ -60,9 +60,6 @@ public class Main extends Application {
     private TextField ca_username;
 
     @FXML
-    private Button closeButton;
-
-    @FXML
     private AnchorPane createAccount_form;
 
     @FXML
@@ -270,10 +267,6 @@ public class Main extends Application {
     	});
     }
     
-    public void close() {
-    	javafx.application.Platform.exit();
-    	
-    }
 	
 	public static void main(String[] args) {
 		launch(args);

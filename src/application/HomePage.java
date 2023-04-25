@@ -69,8 +69,7 @@ public class HomePage implements Initializable{
     
     @FXML
     private Button viewProfileBtn;
-    
-    
+      
     @FXML
     private Button appointment_createBtn;
 
@@ -108,30 +107,6 @@ public class HomePage implements Initializable{
     private AnchorPane main_form;
 
     @FXML
-    private TableColumn<?, ?> profile_col_dob;
-
-    @FXML
-    private TableColumn<?, ?> profile_col_email;
-
-    @FXML
-    private TableColumn<?, ?> profile_col_gender;
-
-    @FXML
-    private TableColumn<?, ?> profile_col_name;
-
-    @FXML
-    private TableColumn<?, ?> profile_col_password;
-
-    @FXML
-    private TableColumn<?, ?> profile_col_patientID;
-
-    @FXML
-    private TableColumn<?, ?> profile_col_phoneNum;
-
-    @FXML
-    private TableColumn<?, ?> profile_col_username;
-
-    @FXML
     private Button profile_deleteBtn;
 
     @FXML
@@ -159,9 +134,6 @@ public class HomePage implements Initializable{
     private TextField profile_phoneNum;
 
     @FXML
-    private TableView<?> profile_tableView;
-
-    @FXML
     private Button profile_updateBtn;
 
     @FXML
@@ -173,7 +145,6 @@ public class HomePage implements Initializable{
     
     private String gender[] = {"Male", "Female", "Other"};
     private String appointmentTime[]  = {"9:00AM", "10:00AM", "11:00AM", "12:00PM", "1:00PM", "2:00PM", "3:00PM", "4:00PM", "5:00PM"};
-    private String physicians[] = {"John Smith", "Emily Nguyen", "David Kim"};
     
     private Connection connect;
     private PreparedStatement prepare;
@@ -196,9 +167,9 @@ public class HomePage implements Initializable{
     		}
     		else {
     			boolean patientIdExists = false;
-    			String sql1 = "SELECT patient_id FROM patient";
+    			String patientIdSql = "SELECT patient_id FROM patient";
     			statement = connect.createStatement();
-    			result = statement.executeQuery(sql1);
+    			result = statement.executeQuery(patientIdSql);
     			while(result.next()) {
     				int patientIdDatabase = result.getInt("patient_id");
     				if(Integer.parseInt(appointment_patientID.getText()) == patientIdDatabase){
@@ -209,19 +180,34 @@ public class HomePage implements Initializable{
     			
     			if(patientIdExists) {
     	    		int physicianID = getPhysicianID();
-    				prepare = connect.prepareStatement(sql);
-    	    		prepare.setInt(1,  Integer.parseInt(appointment_patientID.getText()));
-    	    		prepare.setInt(2, physicianID);
-    	    		prepare.setString(3, String.valueOf(appointment_date.getValue()));
-    	    		prepare.setString(4, (String)appointment_time.getSelectionModel().getSelectedItem());
-    	    		prepare.setString(5, appointment_treatment.getText());
-    				
-    	    		Alert alert = new Alert(AlertType.INFORMATION);
-    	    		alert.setTitle("Appointment Created");
-        			alert.setContentText("You have created an appointment!");
-        			alert.showAndWait();
-        			prepare.executeUpdate();
-        			clearAppointment(); 	
+    	    		String checkAppointmentSql = "SELECT * FROM appointment where appointment_date = ? AND appointment_time = ? AND physician_id = ?";
+    	    		prepare = connect.prepareStatement(checkAppointmentSql);
+    	    		prepare.setString(1, String.valueOf(appointment_date.getValue()));
+    	    		prepare.setString(2, (String)appointment_time.getSelectionModel().getSelectedItem());
+    	    		prepare.setInt(3, physicianID);
+    	    		result = prepare.executeQuery();
+    	    		if(result.next()) {
+    	    			Alert alert = new Alert(AlertType.ERROR);
+            			alert.setTitle("Failed to create Appointment");
+            			alert.setContentText("Sorry! This appointment date and time is already taken!");
+            			alert.showAndWait();
+            			
+    	    		}
+    	    		else {		
+             			prepare = connect.prepareStatement(sql);
+        	    		prepare.setInt(1,  Integer.parseInt(appointment_patientID.getText()));
+        	    		prepare.setInt(2, physicianID);
+        	    		prepare.setString(3, String.valueOf(appointment_date.getValue()));
+        	    		prepare.setString(4, (String)appointment_time.getSelectionModel().getSelectedItem());
+        	    		prepare.setString(5, appointment_treatment.getText());
+        				
+        	    		Alert alert = new Alert(AlertType.INFORMATION);
+        	    		alert.setTitle("Appointment Created");
+            			alert.setContentText("You have created an appointment!");
+            			alert.showAndWait();
+            			prepare.executeUpdate();
+            			clearAppointment();  	    			
+    	    		}
     			}
     			else {
     				Alert alert = new Alert(AlertType.ERROR);
@@ -234,23 +220,6 @@ public class HomePage implements Initializable{
     	catch (Exception e){
     		e.printStackTrace();
     	}
-    }
-    
-    public int getPhysicianID() {
-    	String sql = "SELECT physician_id FROM physician WHERE name = ?";
-		try {
-			prepare = connect.prepareStatement(sql);
-    		prepare.setString(1, (String)appointment_physician.getSelectionModel().getSelectedItem());
-    		result = prepare.executeQuery();
-    		if(result.next())
-    		{
-    			int physicianID = result.getInt("physician_id");
-        		return physicianID;
-    		}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return 0;
     }
     
     public void updateAppointment() {
@@ -352,6 +321,7 @@ public class HomePage implements Initializable{
     	}
     }
     
+    
     public void clearAppointment() {
     	appointment_patientID.setText("");
     	appointment_date.setValue(null);
@@ -359,6 +329,23 @@ public class HomePage implements Initializable{
     	appointment_physician.getSelectionModel().clearSelection();
     	appointment_treatment.setText("");;
 
+    }
+    
+    public int getPhysicianID() {
+    	String sql = "SELECT physician_id FROM physician WHERE name = ?";
+		try {
+			prepare = connect.prepareStatement(sql);
+    		prepare.setString(1, (String)appointment_physician.getSelectionModel().getSelectedItem());
+    		result = prepare.executeQuery();
+    		if(result.next())
+    		{
+    			int physicianID = result.getInt("physician_id");
+        		return physicianID;
+    		}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
     }
     
     public void updatePatientInfo() {
@@ -456,7 +443,22 @@ public class HomePage implements Initializable{
         	    		alert.setTitle("Account deleted");
             			alert.setContentText("You have deleted your account!");
             			alert.showAndWait();
-            			clearAppointment();			
+
+            			profile_deleteBtn.getScene().getWindow().hide();
+            			
+            			Parent root = FXMLLoader.load(getClass().getResource("LoginPage.fxml"));
+        				Stage stage = new Stage();
+        				Scene scene = new Scene(root);
+        				stage.setScene(scene);
+        				stage.show();
+//        				if(java.sql.SQLIntegrityConstraintViolationException) {
+//        			       	String sql12 = "DELETE FROM appointment where patient_id = '" + appointment_patientID.getText() + "'";
+//        			    	prepare = connect.prepareStatement(sql12);
+//                			prepare.executeUpdate();
+//
+//        				}
+        				
+            			
     				}
     			
     			}
@@ -520,6 +522,24 @@ public class HomePage implements Initializable{
     	stage.show();
     }
     
+    public List<String> getPhysicians() {
+    	String sql = "SELECT name FROM physician";
+       	connect = Database.connectDB();
+       	List<String> physicianList = new ArrayList<>();
+		try {
+			statement = connect.createStatement();
+			result = statement.executeQuery(sql);
+			while(result.next()) {
+				String name = result.getString("name");
+				physicianList.add(name);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return physicianList;
+
+    }
+    
     public void appointmentTimeList() {
     	List<String> timeList = new ArrayList<>();
     	
@@ -541,11 +561,7 @@ public class HomePage implements Initializable{
     }
     
     public void appointmentPhysicianList() {
-    	List<String> physicianList = new ArrayList<>();
-    	
-    	for(int i = 0; i < physicians.length; i++) {
-    		physicianList.add(physicians[i]);
-    	}	
+    	List<String> physicianList = getPhysicians();
     	ObservableList listData = FXCollections.observableArrayList(physicianList);
     	appointment_physician.setItems(listData);
     }
