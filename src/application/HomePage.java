@@ -79,9 +79,6 @@ public class HomePage implements Initializable{
     private AnchorPane appointment_form;
 
     @FXML
-    private TextField appointment_patientID;
-
-    @FXML
     private ChoiceBox<?> appointment_time;
     
     @FXML
@@ -121,9 +118,6 @@ public class HomePage implements Initializable{
     private TextField profile_password;
 
     @FXML
-    private TextField profile_patientID;
-
-    @FXML
     private TextField profile_phoneNum;
 
     @FXML
@@ -134,6 +128,8 @@ public class HomePage implements Initializable{
 	
     @FXML
     private AnchorPane userInfo_form;
+    
+    private Main mainController;
      
     
     private String gender[] = {"Male", "Female", "Other"};
@@ -144,13 +140,17 @@ public class HomePage implements Initializable{
     private ResultSet result;
     private Statement statement;
     
+
+	public  void setMainController(Main mainController) {
+		this.mainController = mainController;	
+	}
     
     public void createAppointment() {
     	String sql = "INSERT INTO appointment (patient_id, physician_id, appointment_date, appointment_time, treatment) VALUES (?, ?, ?, ?, ?)";
     	connect = Database.connectDB();
     	
     	try {
-    		if(appointment_patientID.getText().isEmpty() || appointment_physician.getSelectionModel().getSelectedItem() == null 
+    		if(appointment_physician.getSelectionModel().getSelectedItem() == null 
     				|| appointment_physician.getSelectionModel().getSelectedItem() == null || appointment_date.getValue() == null 
     				|| appointment_time.getSelectionModel().getSelectedItem() == null || appointment_treatment.getText().isEmpty()) {
     			Alert alert = new Alert(AlertType.ERROR);
@@ -159,55 +159,38 @@ public class HomePage implements Initializable{
     			alert.showAndWait();
     		}
     		else {
-    			boolean patientIdExists = false;
-    			String patientIdSql = "SELECT patient_id FROM patient";
-    			statement = connect.createStatement();
-    			result = statement.executeQuery(patientIdSql);
-    			while(result.next()) {
-    				int patientIdDatabase = result.getInt("patient_id");
-    				if(Integer.parseInt(appointment_patientID.getText()) == patientIdDatabase){
-    					patientIdExists = true;
-    					break;
-    				}
-    			}
+    			Patient patient = mainController.getPatient();
+    			int patientId = patient.getPatientId();
     			
-    			if(patientIdExists) {
-    	    		int physicianID = getPhysicianID();
-    	    		String checkAppointmentSql = "SELECT * FROM appointment where appointment_date = ? AND appointment_time = ? AND physician_id = ?";
-    	    		prepare = connect.prepareStatement(checkAppointmentSql);
-    	    		prepare.setString(1, String.valueOf(appointment_date.getValue()));
-    	    		prepare.setString(2, (String)appointment_time.getSelectionModel().getSelectedItem());
-    	    		prepare.setInt(3, physicianID);
-    	    		result = prepare.executeQuery();
-    	    		if(result.next()) {
-    	    			Alert alert = new Alert(AlertType.ERROR);
-            			alert.setTitle("Failed to create Appointment");
-            			alert.setContentText("Sorry! This appointment date and time is already taken!");
-            			alert.showAndWait();
+    	    	int physicianID = getPhysicianID();
+    	    	String checkAppointmentSql = "SELECT * FROM appointment where appointment_date = ? AND appointment_time = ? AND physician_id = ?";
+    	    	prepare = connect.prepareStatement(checkAppointmentSql);
+    	    	prepare.setString(1, String.valueOf(appointment_date.getValue()));
+    	    	prepare.setString(2, (String)appointment_time.getSelectionModel().getSelectedItem());
+    	    	prepare.setInt(3, physicianID);
+    	    	result = prepare.executeQuery();
+    	    	if(result.next()) {
+    	    		Alert alert = new Alert(AlertType.ERROR);
+            		alert.setTitle("Failed to create Appointment");
+            		alert.setContentText("Sorry! This appointment date and time is already taken with that physician!");
+            		alert.showAndWait();
             			
-    	    		}
-    	    		else {		
-             			prepare = connect.prepareStatement(sql);
-        	    		prepare.setInt(1,  Integer.parseInt(appointment_patientID.getText()));
-        	    		prepare.setInt(2, physicianID);
-        	    		prepare.setString(3, String.valueOf(appointment_date.getValue()));
-        	    		prepare.setString(4, (String)appointment_time.getSelectionModel().getSelectedItem());
-        	    		prepare.setString(5, appointment_treatment.getText());
+    	    	}
+    	    	else {		
+             		prepare = connect.prepareStatement(sql);
+        	    	prepare.setInt(1,  patientId);
+        	    	prepare.setInt(2, physicianID);
+        	    	prepare.setString(3, String.valueOf(appointment_date.getValue()));
+        	    	prepare.setString(4, (String)appointment_time.getSelectionModel().getSelectedItem());
+        	    	prepare.setString(5, appointment_treatment.getText());
         				
-        	    		Alert alert = new Alert(AlertType.INFORMATION);
-        	    		alert.setTitle("Appointment Created");
-            			alert.setContentText("You have created an appointment!");
-            			alert.showAndWait();
-            			prepare.executeUpdate();
-            			clearAppointment();  	    			
-    	    		}
-    			}
-    			else {
-    				Alert alert = new Alert(AlertType.ERROR);
-        			alert.setTitle("Patient does not exist");
-        			alert.setContentText("This patient does not exist.");
-        			alert.showAndWait();
-    			}
+        	    	Alert alert = new Alert(AlertType.INFORMATION);
+        	    	alert.setTitle("Appointment Created");
+            		alert.setContentText("You have created an appointment!");
+            		alert.showAndWait();
+            		prepare.executeUpdate();
+            		clearAppointment();  	    			
+    	    	}
     		}
     	}
     	catch (Exception e){
@@ -217,15 +200,18 @@ public class HomePage implements Initializable{
     
     public void updateAppointment() {
     	connect = Database.connectDB();
+    	Patient patient = mainController.getPatient();
+		int patientId = patient.getPatientId();
     	int physicianID = getPhysicianID();
+
     	String sql = "UPDATE appointment SET physician_id = '" + physicianID  
     	+ "', appointment_date = '" + String.valueOf(appointment_date.getValue()) 
     	+ "',  appointment_time = '" + appointment_time.getSelectionModel().getSelectedItem() 
     	+ "',  treatment = '" + appointment_treatment.getText() 
-    	+ "' WHERE patient_id = '"+ appointment_patientID.getText() + "'";
+    	+ "' WHERE patient_id = '"+ patientId + "'";
     	
     	try {
-    		if(appointment_patientID.getText().isEmpty() || appointment_physician.getSelectionModel().getSelectedItem() == null 
+    		if(appointment_physician.getSelectionModel().getSelectedItem() == null 
     				|| appointment_physician.getSelectionModel().getSelectedItem() == null || appointment_date.getValue() == null 
     				|| appointment_time.getSelectionModel().getSelectedItem() == null || appointment_treatment.getText().isEmpty()) {
     			Alert alert = new Alert(AlertType.ERROR);
@@ -240,7 +226,7 @@ public class HomePage implements Initializable{
     			result = statement.executeQuery(sql1);
     			while(result.next()) {
     				int patientIdDatabase = result.getInt("patient_id");
-    				if(Integer.parseInt(appointment_patientID.getText()) == patientIdDatabase){
+    				if(patientId == patientIdDatabase){
     					appointPatientIdExists = true;
     					break;
     				}
@@ -268,10 +254,14 @@ public class HomePage implements Initializable{
     }
     
     public void deleteAppointment() {
-       	String sql = "DELETE FROM appointment where patient_id = '" + appointment_patientID.getText() + "'";
+    	Patient patient = mainController.getPatient();
+		int patientId = patient.getPatientId();
+		
+    	String sql = "DELETE FROM appointment where patient_id = '" + patientId + "'";
        	connect = Database.connectDB();
+       
     	try {
-    		if(appointment_patientID.getText().isEmpty() || appointment_physician.getSelectionModel().getSelectedItem() == null 
+    		if(appointment_physician.getSelectionModel().getSelectedItem() == null 
     				|| appointment_physician.getSelectionModel().getSelectedItem() == null || appointment_date.getValue() == null 
     				|| appointment_time.getSelectionModel().getSelectedItem() == null || appointment_treatment.getText().isEmpty()) {
     			Alert alert = new Alert(AlertType.ERROR);
@@ -286,7 +276,7 @@ public class HomePage implements Initializable{
     			result = statement.executeQuery(sql1);
     			while(result.next()) {
     				int patientIdDatabase = result.getInt("patient_id");
-    				if(Integer.parseInt(appointment_patientID.getText()) == patientIdDatabase){
+    				if(patientId == patientIdDatabase){
     					appointPatientIdExists = true;
     					break;
     				}
@@ -316,7 +306,6 @@ public class HomePage implements Initializable{
     
     
     public void clearAppointment() {
-    	appointment_patientID.setText("");
     	appointment_date.setValue(null);
     	appointment_time.getSelectionModel().clearSelection();
     	appointment_physician.getSelectionModel().clearSelection();
@@ -343,6 +332,9 @@ public class HomePage implements Initializable{
     
     public void updatePatientInfo() {
        	connect = Database.connectDB();
+    	Patient patient = mainController.getPatient();
+		int patientId = patient.getPatientId();
+		
     	String sql = "UPDATE patient SET name = '" + profile_name.getText()   
     	+ "', email = '" + profile_email.getText()  
     	+ "',  username = '" + profile_username.getText() 
@@ -350,10 +342,10 @@ public class HomePage implements Initializable{
     	+ "',  phoneNumber = '" + profile_phoneNum.getText() 
     	+ "',  dateOfBirth = '" + String.valueOf(profile_dob.getValue()) 
     	+ "',  gender = '" + profile_gender.getSelectionModel().getSelectedItem() 
-    	+ "' WHERE patient_id = '"+ profile_patientID.getText() + "'";
+    	+ "' WHERE patient_id = '"+ patientId + "'";
     	
     	try {
-    		if(profile_patientID.getText().isEmpty() || profile_name.getText().isEmpty() || profile_email.getText().isEmpty() 
+    		if(profile_name.getText().isEmpty() || profile_email.getText().isEmpty() 
     				|| profile_username.getText().isEmpty() || profile_password.getText().isEmpty()  
     				|| profile_phoneNum.getText().isEmpty() || profile_dob.getValue() == null  
     				|| profile_gender.getSelectionModel().getSelectedItem() == null) {
@@ -363,35 +355,18 @@ public class HomePage implements Initializable{
     			alert.showAndWait();
     		}
     		else {	
-    			boolean patientIdExists = false;
-    			String sql1 = "SELECT patient_id FROM patient";
-    			statement = connect.createStatement();
-    			result = statement.executeQuery(sql1);
-    			while(result.next()) {
-    				int patientIdDatabase = result.getInt("patient_id");
-    				if(Integer.parseInt(profile_patientID.getText()) == patientIdDatabase){
-    					patientIdExists = true;
-    					break;
-    				}
-    			}
-    			if(patientIdExists) {
+   
+    			
         			prepare = connect.prepareStatement(sql);
         			prepare.executeUpdate();
         	   		Alert alert = new Alert(AlertType.INFORMATION);
     	    		alert.setTitle("Account Updated");
         			alert.setContentText("You have updated your account!");
         			alert.showAndWait();
-        			setUserInfo(Integer.parseInt(profile_patientID.getText()), profile_name.getText(), profile_email.getText(), profile_username.getText(), 
+        			setUserInfo(patientId, profile_name.getText(), profile_email.getText(), profile_username.getText(), 
         					profile_password.getText(), profile_phoneNum.getText(), String.valueOf(profile_dob.getValue()), 
         					(String)profile_gender.getSelectionModel().getSelectedItem());
-        			clearPatientInfo();
-    			}
-    			else {
-    				Alert alert = new Alert(AlertType.ERROR);
-    	    		alert.setTitle("Account does not exist");
-        			alert.setContentText("Be sure to enter your correct id");
-        			alert.showAndWait();
-    			} 			
+        			clearPatientInfo();   				
     		}
     	}
     	catch (Exception e) {
@@ -401,10 +376,12 @@ public class HomePage implements Initializable{
     }
     
     public void deletePatient() {
-       	String sql = "DELETE FROM patient where patient_id = '" + profile_patientID.getText() + "'";
+    	Patient patient = mainController.getPatient();
+		int patientId = patient.getPatientId();
+       	String sql = "DELETE FROM patient where patient_id = '" + patientId + "'";
        	connect = Database.connectDB();
     	try {
-    		if(profile_patientID.getText().isEmpty() || profile_name.getText().isEmpty() || profile_email.getText().isEmpty() 
+    		if(profile_name.getText().isEmpty() || profile_email.getText().isEmpty() 
     				|| profile_username.getText().isEmpty() || profile_password.getText().isEmpty()  
     				|| profile_phoneNum.getText().isEmpty() || profile_dob.getValue() == null  
     				|| profile_gender.getSelectionModel().getSelectedItem() == null) {
@@ -414,18 +391,7 @@ public class HomePage implements Initializable{
     			alert.showAndWait();
     		}
     		else {
-    			boolean patientIdExists = false;
-    			String sql1 = "SELECT patient_id FROM patient";
-    			statement = connect.createStatement();
-    			result = statement.executeQuery(sql1);
-    			while(result.next()) {
-    				int patientIdDatabase = result.getInt("patient_id");
-    				if(Integer.parseInt(profile_patientID.getText()) == patientIdDatabase){
-    					patientIdExists = true;
-    					break;
-    				}
-    			}		
-    			if(patientIdExists) {
+	
     				Alert confirmDeletion = new Alert(AlertType.CONFIRMATION);
     				confirmDeletion.setContentText("This will permanently delete your account. Would you like to proceed?");
     				Optional<ButtonType> deleteOption = confirmDeletion.showAndWait();
@@ -433,11 +399,11 @@ public class HomePage implements Initializable{
     					
     					String checkAppointmentSql = "SELECT * FROM appointment where patient_id = ?";
         	    		prepare = connect.prepareStatement(checkAppointmentSql);
-        	    		prepare.setString(1, profile_patientID.getText());
+        	    		prepare.setString(1, String.valueOf(patientId));
         	    		result = prepare.executeQuery();
         	    		
         	    		if(result.next()) {
-        	    	       	String deleteAppointment = "DELETE FROM appointment where patient_id = '" + profile_patientID.getText() + "'";
+        	    	       	String deleteAppointment = "DELETE FROM appointment where patient_id = '" + patientId + "'";
         	    	    	prepare = connect.prepareStatement(deleteAppointment);
                 			prepare.executeUpdate();
         	    		}
@@ -458,13 +424,7 @@ public class HomePage implements Initializable{
         				stage.show();     			
     				}
     			
-    			}
-    			else {
-    				Alert alert = new Alert(AlertType.ERROR);
-    	    		alert.setTitle("Account does not exist");
-        			alert.setContentText("You have not created an account yet!");
-        			alert.showAndWait();
-    			} 	
+    			 	
     			
     		}
     	}
@@ -474,7 +434,6 @@ public class HomePage implements Initializable{
     }
     
     public void clearPatientInfo() {
-    	profile_patientID.setText("");
     	profile_name.setText("");
     	profile_email.setText("");
     	profile_username.setText("");
@@ -582,5 +541,6 @@ public class HomePage implements Initializable{
 		genderList();
 		
 	}
+
 
 }

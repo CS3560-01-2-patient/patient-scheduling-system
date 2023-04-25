@@ -22,7 +22,7 @@
                <top>
                   <AnchorPane prefHeight="35.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane layoutX="37.0" layoutY="-82.0" prefHeight="118.0" prefWidth="1100.0" style="-fx-background-color: gray;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane layoutX="37.0" layoutY="-82.0" prefHeight="118.0" prefWidth="1100.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <Text layoutX="7.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient Scheduling System">
                                  <font>
@@ -57,34 +57,28 @@
                <center>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <AnchorPane fx:id="appointment_form" layoutX="175.0" layoutY="104.0" prefHeight="565.0" prefWidth="880.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="appointment_form" layoutX="175.0" layoutY="104.0" prefHeight="565.0" prefWidth="880.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="528.0" prefWidth="841.0" style="-fx-background-color: skyblue;">
                                  <children>
-                                    <Text layoutX="31.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Patient ID">
+                                    <Text layoutX="33.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Date" wrappingWidth="99.521484375">
                                        <font>
-                                          <Font size="14.0" />
+                                          <Font size="18.0" />
                                        </font>
                                     </Text>
-                                    <TextField fx:id="appointment_patientID" layoutX="31.0" layoutY="32.0" promptText="Patient ID" />
-                                    <Text layoutX="34.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Date" wrappingWidth="74.521484375">
+                                    <TextArea fx:id="appointment_treatment" layoutX="32.0" layoutY="292.0" prefHeight="72.0" prefWidth="288.0" promptText="Treatment" />
+                                    <Text layoutX="32.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Time" wrappingWidth="101.6220703125">
                                        <font>
-                                          <Font size="14.0" />
+                                          <Font size="18.0" />
                                        </font>
                                     </Text>
-                                    <TextArea fx:id="appointment_treatment" layoutX="31.0" layoutY="283.0" prefHeight="72.0" prefWidth="288.0" promptText="Treatment" />
-                                    <Text layoutX="33.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Time" wrappingWidth="74.6220703125">
+                                    <ChoiceBox fx:id="appointment_time" layoutX="31.0" layoutY="140.0" prefHeight="35.0" prefWidth="178.0" />
+                                    <Text layoutX="34.0" layoutY="286.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Treatment" wrappingWidth="97.4375">
                                        <font>
-                                          <Font size="14.0" />
+                                          <Font size="18.0" />
                                        </font>
                                     </Text>
-                                    <ChoiceBox fx:id="appointment_time" layoutX="31.0" layoutY="162.0" prefWidth="150.0" />
-                                    <Text layoutX="33.0" layoutY="279.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Treatment" wrappingWidth="74.4375">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Text>
-                                    <DatePicker fx:id="appointment_date" layoutX="31.0" layoutY="95.0" prefHeight="25.0" prefWidth="151.0" promptText="Appointment Date" />
+                                    <DatePicker fx:id="appointment_date" layoutX="31.0" layoutY="62.0" prefHeight="35.0" prefWidth="178.0" promptText="Appointment Date" />
                                     <Button fx:id="appointment_createBtn" layoutX="189.0" layoutY="433.0" mnemonicParsing="false" onAction="#createAppointment" prefHeight="35.0" prefWidth="145.0" text="Create Appointment">
                                        <font>
                                           <Font size="13.0" />
@@ -100,14 +94,14 @@
                                           <Font size="13.0" />
                                        </font>
                                     </Button>
-                                    <ChoiceBox fx:id="appointment_physician" layoutX="31.0" layoutY="223.0" prefWidth="150.0" />
-                                    <Text layoutX="32.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Physician" wrappingWidth="114.6220703125">
+                                    <ChoiceBox fx:id="appointment_physician" layoutX="31.0" layoutY="216.0" prefHeight="35.0" prefWidth="178.0" />
+                                    <Text layoutX="32.0" layoutY="210.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Physician" wrappingWidth="150.6220703125">
                                        <font>
-                                          <Font size="14.0" />
+                                          <Font size="18.0" />
                                        </font>
                                     </Text>
-                                    <Button layoutX="31.0" layoutY="368.0" mnemonicParsing="false" onAction="#clearAppointment" prefHeight="25.0" prefWidth="60.0" text="Clear" />
-                                    <ImageView fitHeight="362.0" fitWidth="376.0" layoutX="430.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
+                                    <Button layoutX="32.0" layoutY="377.0" mnemonicParsing="false" onAction="#clearAppointment" prefHeight="25.0" prefWidth="60.0" text="Clear" />
+                                    <ImageView fitHeight="443.0" fitWidth="401.0" layoutX="411.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../../../../Downloads/calendar.png" />
                                        </image>
@@ -120,17 +114,16 @@
                            <children>
                               <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="538.0" prefWidth="848.0" style="-fx-background-color: skyblue;">
                                  <children>
-                                    <TextField fx:id="profile_patientID" layoutX="104.0" layoutY="99.0" prefHeight="35.0" prefWidth="265.0" promptText="Patient ID" />
-                                    <TextField fx:id="profile_name" layoutX="388.0" layoutY="99.0" prefHeight="35.0" prefWidth="265.0" promptText="Name" />
-                                    <TextField fx:id="profile_email" layoutX="105.0" layoutY="184.0" prefHeight="35.0" prefWidth="548.0" promptText="Email" />
+                                    <TextField fx:id="profile_name" layoutX="105.0" layoutY="101.0" prefHeight="35.0" prefWidth="556.0" promptText="Name" />
+                                    <TextField fx:id="profile_email" layoutX="103.0" layoutY="184.0" prefHeight="35.0" prefWidth="556.0" promptText="Email" />
                                     <Label layoutX="105.0" layoutY="149.0" text="Email">
                                        <font>
                                           <Font size="24.0" />
                                        </font>
                                     </Label>
                                     <TextField fx:id="profile_username" layoutX="105.0" layoutY="270.0" prefHeight="35.0" prefWidth="265.0" promptText="Username" />
-                                    <TextField fx:id="profile_password" layoutX="395.0" layoutY="270.0" prefHeight="35.0" prefWidth="265.0" promptText="Password" />
-                                    <ChoiceBox fx:id="profile_gender" layoutX="490.0" layoutY="367.0" prefHeight="35.0" prefWidth="170.0" />
+                                    <TextField fx:id="profile_password" layoutX="396.0" layoutY="270.0" prefHeight="35.0" prefWidth="265.0" promptText="Password" />
+                                    <ChoiceBox fx:id="profile_gender" layoutX="489.0" layoutY="367.0" prefHeight="35.0" prefWidth="170.0" />
                                     <TextField fx:id="profile_phoneNum" layoutX="108.0" layoutY="367.0" prefHeight="35.0" prefWidth="167.0" promptText="Phone Number" />
                                     <DatePicker fx:id="profile_dob" layoutX="299.0" layoutY="367.0" prefHeight="35.0" prefWidth="163.0" promptText="Date of Birth" />
                                     <Button fx:id="profile_updateBtn" layoutX="266.0" layoutY="461.0" mnemonicParsing="false" onAction="#updatePatientInfo" prefHeight="39.0" prefWidth="122.0" text="Update">
@@ -143,17 +136,12 @@
                                           <Font size="18.0" />
                                        </font>
                                     </Button>
-                                    <Label layoutX="106.0" layoutY="64.0" text="Patient ID">
+                                    <Label layoutX="106.0" layoutY="66.0" prefHeight="35.0" prefWidth="66.0" text="Name">
                                        <font>
                                           <Font size="24.0" />
                                        </font>
                                     </Label>
-                                    <Label layoutX="390.0" layoutY="64.0" text="Name">
-                                       <font>
-                                          <Font size="24.0" />
-                                       </font>
-                                    </Label>
-                                    <Text layoutX="104.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Profile" underline="true" wrappingWidth="129.796875">
+                                    <Text layoutX="107.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit Profile" underline="true" wrappingWidth="129.796875">
                                        <font>
                                           <Font name="Verdana" size="24.0" />
                                        </font>
@@ -188,7 +176,7 @@
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="userInfo_form" layoutX="108.0" layoutY="56.0" prefHeight="565.0" prefWidth="880.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="userInfo_form" layoutX="108.0" layoutY="56.0" prefHeight="565.0" prefWidth="880.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <AnchorPane layoutX="12.0" layoutY="10.0" prefHeight="545.0" prefWidth="857.0" style="-fx-background-color: skyblue;">
                                  <children>

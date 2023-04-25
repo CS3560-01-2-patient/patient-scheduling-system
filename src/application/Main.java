@@ -94,6 +94,8 @@ public class Main extends Application {
     private PreparedStatement prepare;
     private ResultSet result;
     
+    private Patient myPatient;
+    
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -130,6 +132,7 @@ public class Main extends Application {
     				FXMLLoader loader = new FXMLLoader(getClass().getResource("HomePage.fxml"));
     				Parent root = loader.load();
     				HomePage homepage = loader.getController();
+    				homepage.setMainController(this);
     				
     	 			String sql1 = "SELECT * FROM patient WHERE username = ?";	
 	    			prepare = connect.prepareStatement(sql1);
@@ -145,7 +148,9 @@ public class Main extends Application {
 	        			String dateOfBirth = result.getString("dateOfBirth");
 	        			String gender= result.getString("gender");
 		        		homepage.setUserInfo(patient_id, name, email, username, password, phoneNumber, dateOfBirth, gender);
-		        		Patient myPatient = new Patient(patient_id, name, email, username, password, phoneNumber, dateOfBirth, gender);
+		        		myPatient = new Patient(patient_id, name, email, username, password, phoneNumber, dateOfBirth, gender);
+		        		System.out.println(myPatient.getName());
+
 	        		}
     				alert = new Alert(AlertType.INFORMATION);
     				alert.setTitle("Information Message");
@@ -176,6 +181,11 @@ public class Main extends Application {
     	}
     }
     
+    public Patient getPatient() {
+    	return myPatient;
+    }
+    
+    
     public void createAccount() {
     	String sql = "INSERT INTO patient (name, email, username, password, phoneNumber, dateOfBirth, gender) VALUES (?, ?, ?, ?, ?, ?, ?)";
     	connect = Database.connectDB();
@@ -183,7 +193,6 @@ public class Main extends Application {
 		ca_maleRB.setToggleGroup(toggleGroup);
 		ca_femaleRB.setToggleGroup(toggleGroup);
 		ca_otherRB.setToggleGroup(toggleGroup);
-		
 		ca_maleRB.setSelected(true);
 		
     	try {
