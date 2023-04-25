@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,13 +24,10 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -96,9 +92,6 @@ public class HomePage implements Initializable{
 
     @FXML
     private Button appointment_updateBtn;
-
-    @FXML
-    private Button closeBtn;
 
     @FXML
     private Button logoutBtn;
@@ -437,6 +430,18 @@ public class HomePage implements Initializable{
     				confirmDeletion.setContentText("This will permanently delete your account. Would you like to proceed?");
     				Optional<ButtonType> deleteOption = confirmDeletion.showAndWait();
     				if(deleteOption.get().equals(ButtonType.OK)) {
+    					
+    					String checkAppointmentSql = "SELECT * FROM appointment where patient_id = ?";
+        	    		prepare = connect.prepareStatement(checkAppointmentSql);
+        	    		prepare.setString(1, profile_patientID.getText());
+        	    		result = prepare.executeQuery();
+        	    		
+        	    		if(result.next()) {
+        	    	       	String deleteAppointment = "DELETE FROM appointment where patient_id = '" + profile_patientID.getText() + "'";
+        	    	    	prepare = connect.prepareStatement(deleteAppointment);
+                			prepare.executeUpdate();
+        	    		}
+        	    		
     					prepare = connect.prepareStatement(sql);
             			prepare.executeUpdate();
             	   		Alert alert = new Alert(AlertType.INFORMATION);
@@ -450,15 +455,7 @@ public class HomePage implements Initializable{
         				Stage stage = new Stage();
         				Scene scene = new Scene(root);
         				stage.setScene(scene);
-        				stage.show();
-//        				if(java.sql.SQLIntegrityConstraintViolationException) {
-//        			       	String sql12 = "DELETE FROM appointment where patient_id = '" + appointment_patientID.getText() + "'";
-//        			    	prepare = connect.prepareStatement(sql12);
-//                			prepare.executeUpdate();
-//
-//        				}
-        				
-            			
+        				stage.show();     			
     				}
     			
     			}
@@ -578,11 +575,6 @@ public class HomePage implements Initializable{
 		
 	}
 	
-    
-    public void close() {
-    	javafx.application.Platform.exit();
-    }
-    
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		appointmentTimeList();
