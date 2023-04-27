@@ -5,14 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 
-import javafx.animation.TranslateTransition;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.util.Duration;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -24,46 +20,42 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Text;
+
 
 
 public class Main extends Application {
-    @FXML
-    private Button ca_createAccountButton;
+	@FXML
+    private Button createAccountBtn;
 
     @FXML
-    private DatePicker ca_dob;
-    
-    @FXML
-    private TextField ca_phoneNum;
+    private DatePicker createAccountDob;
 
     @FXML
-    private TextField ca_email;
-    
-    @FXML
-    private RadioButton ca_femaleRB;
+    private TextField createAccountEmail;
 
     @FXML
-    private RadioButton ca_maleRB;
+    private TextField createAccountName;
 
     @FXML
-    private TextField ca_name;
+    private PasswordField createAccountPassword;
 
     @FXML
-    private RadioButton ca_otherRB;
+    private TextField createAccountPhone;
 
     @FXML
-    private PasswordField ca_password;
-
-    @FXML
-    private TextField ca_username;
+    private TextField createAccountUsername;
 
     @FXML
     private AnchorPane createAccount_form;
 
     @FXML
-    private Text edit_label;
+    private RadioButton femaleRB;
+
+    @FXML
+    private AnchorPane left_form;
+
+    @FXML
+    private Button loginButton;
 
     @FXML
     private AnchorPane login_form;
@@ -72,24 +64,23 @@ public class Main extends Application {
     private AnchorPane main_form;
 
     @FXML
-    private Button si_loginButton;
+    private RadioButton maleRB;
 
     @FXML
-    private PasswordField si_passwordTextField;
+    private RadioButton otherRB;
 
     @FXML
-    private TextField si_usernameTextField;
+    private Button otherSignInBtn;
 
     @FXML
-    private AnchorPane sub_form;
+    private PasswordField passwordTextField;
 
     @FXML
-    private Button sub_loginBtn;
+    private AnchorPane right_form;
 
     @FXML
-    private Button sub_signupBtn;
+    private TextField usernameTextField;
     
-    @FXML
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
@@ -116,11 +107,11 @@ public class Main extends Application {
     	
     	try {
     		prepare = connect.prepareStatement(sql);
-    		prepare.setString(1, si_usernameTextField.getText());
-    		prepare.setString(2, si_passwordTextField.getText());
+    		prepare.setString(1, usernameTextField.getText());
+    		prepare.setString(2, passwordTextField.getText());
     		result = prepare.executeQuery();
     		Alert alert;
-    		if(si_usernameTextField.getText().isEmpty() || si_passwordTextField.getText().isEmpty()) {
+    		if(usernameTextField.getText().isEmpty() || passwordTextField.getText().isEmpty()) {
     			alert = new Alert(AlertType.ERROR);
     			alert.setTitle("Error Message");
     			alert.setHeaderText(null);
@@ -136,7 +127,7 @@ public class Main extends Application {
     				
     	 			String sql1 = "SELECT * FROM patient WHERE username = ?";	
 	    			prepare = connect.prepareStatement(sql1);
-	        		prepare.setString(1, si_usernameTextField.getText());
+	        		prepare.setString(1, usernameTextField.getText());
 	        		result = prepare.executeQuery();
 	        		while(result.next()) {
 	        			int patient_id = result.getInt("patient_id");
@@ -156,7 +147,7 @@ public class Main extends Application {
     				alert.setContentText("You have logged in!");
     				alert.showAndWait();	
     				
-    				si_loginButton.getScene().getWindow().hide();
+    				loginButton.getScene().getWindow().hide();
 	   	        		
     				Stage stage = new Stage();
     				Scene scene = new Scene(root);
@@ -186,16 +177,16 @@ public class Main extends Application {
     	String sql = "INSERT INTO patient (name, email, username, password, phoneNumber, dateOfBirth, gender) VALUES (?, ?, ?, ?, ?, ?, ?)";
     	connect = Database.connectDB();
 		ToggleGroup toggleGroup = new ToggleGroup();
-		ca_maleRB.setToggleGroup(toggleGroup);
-		ca_femaleRB.setToggleGroup(toggleGroup);
-		ca_otherRB.setToggleGroup(toggleGroup);
-		ca_maleRB.setSelected(true);
+		maleRB.setToggleGroup(toggleGroup);
+		femaleRB.setToggleGroup(toggleGroup);
+		otherRB.setToggleGroup(toggleGroup);
+		maleRB.setSelected(true);
 		
     	try {
     		Alert alert;
-        	LocalDate date = ca_dob.getValue();
+        	LocalDate date = createAccountDob.getValue();
 			String gender = ((RadioButton) toggleGroup.getSelectedToggle()).getText();
-    		if(ca_name.getText().isEmpty() || ca_email.getText().isEmpty() || ca_username.getText().isEmpty() || ca_password.getText().isEmpty() || ca_email.getText().isEmpty() || ca_phoneNum.getText().isEmpty() || date == null) { 
+    		if(createAccountName.getText().isEmpty() || createAccountEmail.getText().isEmpty() || createAccountUsername.getText().isEmpty() || createAccountPassword.getText().isEmpty() || createAccountPhone.getText().isEmpty() || date == null) { 
     			alert = new Alert(AlertType.ERROR);
     			alert.setTitle("Error");
     			alert.setContentText("Please fill all blank fields");	
@@ -204,23 +195,23 @@ public class Main extends Application {
     		else {
     			
     			PreparedStatement psCheckUserExists = connect.prepareStatement("SELECT * FROM patient WHERE username = ?");
-    			psCheckUserExists.setString(1, ca_username.getText());
+    			psCheckUserExists.setString(1, createAccountUsername.getText());
     			ResultSet resultSet = psCheckUserExists.executeQuery();
     			
     			if(resultSet.isBeforeFirst()) {
-    				System.out.println("User already exists!");
     				alert = new Alert(Alert.AlertType.ERROR);
+        			alert.setTitle("Username already exists!");
     				alert.setContentText("You cannot use this username.");
     				alert.showAndWait();
     			}
     			else {
     				String dateOfBirth = date.toString();
         			prepare = connect.prepareStatement(sql);
-        			prepare.setString(1, ca_name.getText());
-        			prepare.setString(2, ca_email.getText());
-        			prepare.setString(3, ca_username.getText());
-        			prepare.setString(4, ca_password.getText());
-        			prepare.setString(5, ca_phoneNum.getText());
+        			prepare.setString(1, createAccountName.getText());
+        			prepare.setString(2, createAccountEmail.getText());
+        			prepare.setString(3, createAccountUsername.getText());
+        			prepare.setString(4, createAccountPassword.getText());
+        			prepare.setString(5, createAccountPhone.getText());
         			prepare.setString(6, dateOfBirth);
         			prepare.setString(7, gender);
         			    			
@@ -240,34 +231,19 @@ public class Main extends Application {
     	}
     }
     
-    public void createAccountSlider() {
-    	TranslateTransition slider1 = new TranslateTransition();
-    	slider1.setNode(sub_form);
-    	slider1.setToX(300);
-    	slider1.setDuration(Duration.seconds(.5));
-    	slider1.play();
-    	
-    	slider1.setOnFinished((ActionEvent event) -> {
-    		edit_label.setText("Login into your Account");
-    		
-    		sub_signupBtn.setVisible(false);
-    		sub_loginBtn.setVisible(true); 		
-    	});
+    public void createAccountView() {
+    	left_form.setVisible(false);
+    	login_form.setVisible(false);
+    	createAccount_form.setVisible(true);
+    	right_form.setVisible(true);
+
     }
     
-    public void loginSlider() {
-    	TranslateTransition slider1 = new TranslateTransition();
-    	slider1.setNode(sub_form);
-    	slider1.setToX(0);
-    	slider1.setDuration(Duration.seconds(.5));
-    	slider1.play();
-    	
-    	slider1.setOnFinished((ActionEvent event) -> {
-    		edit_label.setText("Don't have an account?");
-    		
-    		sub_signupBtn.setVisible(true);
-    		sub_loginBtn.setVisible(false);	
-    	});
+    public void loginView() {
+    	left_form.setVisible(true);
+    	login_form.setVisible(true);
+    	createAccount_form.setVisible(false);
+    	right_form.setVisible(false);
     }
     
 	
