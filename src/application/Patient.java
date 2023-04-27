@@ -124,49 +124,19 @@ public class Patient{
 	   }
 	   // Method to update the elements of the database
 	   
-	   public void updatePatientDatabase(){
-				try {
-					Connection connection = Database.connectDB();
-					PreparedStatement selectStmt = connection.prepareStatement("SELECT * FROM patient WHERE patient_id = ?");
-				    selectStmt.setInt(1, this.patientId);
-				    ResultSet rs = selectStmt.executeQuery();
-				    // Updates each element inside the database
-					if(rs.next()) {
-						 if (name != null) {
-					            rs.updateString("name", name);
-					        }
-					        
-					        if (email != null) {
-					            rs.updateString("email", email);
-					        }
-					        
-					        if (username != null) {
-					            rs.updateString("username", username);
-					        }
-					        
-					        if (password != null) {
-					            rs.updateString("password", password);
-					        }
-					        
-					        if (phoneNumber != null) {
-					            rs.updateString("phoneNumber", this.phoneNumber);
-					        }
+	   public void updatePatientInfo(String name, String email, String username, String password, String phoneNumber, String dateOfBirth, String gender){
+		   
+		      this.name = name;
+		      this.email = email;
+		      this.username = username;
+		      this.password = password;
+		      this.phoneNumber = phoneNumber;
+		      this.dateOfBirth = dateOfBirth;
+		      this.gender = gender;
 
-					        if (dateOfBirth != null) {
-					            rs.updateString("dateOfBirth", this.dateOfBirth);
-					        }
-
-					        if (gender != null) {
-					            rs.updateString("gender", this.gender);
-					        }
-					}
-
-					rs.updateRow();	//Confirms updates to the database
 					
-				}catch(SQLException e) {
-					e.printStackTrace();
-				}
-			} 
+			
+		} 
 	   	public void getPatientInfo(int patientID)
 	   	{
 	   		try {

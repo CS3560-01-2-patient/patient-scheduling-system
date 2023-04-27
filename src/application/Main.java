@@ -149,8 +149,6 @@ public class Main extends Application {
 	        			String gender= result.getString("gender");
 		        		homepage.setUserInfo(patient_id, name, email, username, password, phoneNumber, dateOfBirth, gender);
 		        		myPatient = new Patient(patient_id, name, email, username, password, phoneNumber, dateOfBirth, gender);
-		        		System.out.println(myPatient.getName());
-
 	        		}
     				alert = new Alert(AlertType.INFORMATION);
     				alert.setTitle("Information Message");
@@ -159,9 +157,7 @@ public class Main extends Application {
     				alert.showAndWait();	
     				
     				si_loginButton.getScene().getWindow().hide();
-	   
-	        		
-    				//Parent root = FXMLLoader.load(getClass().getResource("HomePage.fxml"));
+	   	        		
     				Stage stage = new Stage();
     				Scene scene = new Scene(root);
     				stage.setScene(scene);
@@ -228,7 +224,6 @@ public class Main extends Application {
         			prepare.setString(6, dateOfBirth);
         			prepare.setString(7, gender);
         			    			
-        			
         			alert = new Alert(AlertType.INFORMATION);
         			alert.setTitle("Account Created");
         			alert.setContentText("Success! You have created a new account!");
@@ -259,8 +254,6 @@ public class Main extends Application {
     		sub_loginBtn.setVisible(true); 		
     	});
     }
-    
-    
     
     public void loginSlider() {
     	TranslateTransition slider1 = new TranslateTransition();

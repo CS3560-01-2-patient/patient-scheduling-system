@@ -5,6 +5,8 @@ public class Appointment {
     private int appointment_id;
     private Patient patient;
     private Physician physician;
+    private int patient_id;
+    private int physician_id;
     private String appointment_date;
     private String appointment_time;
     private String treatment;
@@ -26,10 +28,27 @@ public class Appointment {
         this.treatment = treatment;
     }
     
+    public Appointment(Integer appointmentId, Integer patient_id, Integer physician_id, String appointmentDate, String appointmentTime,  String treatment) {
+        this.appointment_id = appointmentId;
+        this.patient_id = patient_id;
+        this.physician_id = physician_id;
+        this.appointment_date = appointmentDate;
+        this.appointment_time = appointmentTime;
+        this.treatment = treatment;
+    }
+    
     // All of the appointment's getters and setters
     
     public int getAppointmentId() {
         return appointment_id;
+    }
+    
+    public int getPatientId() {
+        return patient_id;
+    }
+    
+    public int getPhysicianId() {
+        return physician_id;
     }
     
     public void setAppointmentId(int appointmentId) {

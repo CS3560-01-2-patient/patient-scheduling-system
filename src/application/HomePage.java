@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,8 +25,11 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
@@ -129,6 +133,24 @@ public class HomePage implements Initializable{
     @FXML
     private AnchorPane userInfo_form;
     
+    @FXML
+    private TableColumn<Appointment, String> appt_col_date;
+
+    @FXML
+    private TableColumn<Appointment, Integer> appt_col_patientId;
+
+    @FXML
+    private TableColumn<Appointment, String> appt_col_physician;
+
+    @FXML
+    private TableColumn<Appointment, String> appt_col_time;
+
+    @FXML
+    private TableColumn<Appointment, String> appt_col_treatment;
+
+    @FXML
+    private TableView<Appointment> appt_tableView;
+    
     private Main mainController;
      
     
@@ -143,6 +165,58 @@ public class HomePage implements Initializable{
 
 	public  void setMainController(Main mainController) {
 		this.mainController = mainController;	
+	}
+	
+	public ObservableList<Appointment> appointmentDataList(){
+		
+		ObservableList<Appointment> listData = FXCollections.observableArrayList();
+		
+		String sql = "SELECT * FROM appointment";
+		
+		connect = Database.connectDB();
+		try {
+			prepare = connect.prepareStatement(sql);
+			result = prepare.executeQuery();
+			
+			Appointment appointments;
+			
+			while(result.next()) {
+				appointments = new Appointment(result.getInt("appointment_id"), result.getInt("patient_id"),
+						result.getInt("physician_id"), result.getString("appointment_date"), result.getString("appointment_time"), 
+								result.getString("treatment"));
+				listData.add(appointments);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listData;
+	}
+	
+	private ObservableList<Appointment> appointmentListData;
+	
+	public void showAppointments() {
+		appointmentListData = appointmentDataList();
+		
+		appt_col_patientId.setCellValueFactory(new PropertyValueFactory<>("patientId"));
+		appt_col_physician.setCellValueFactory(new PropertyValueFactory<>("PhysicianId"));
+		appt_col_date.setCellValueFactory(new PropertyValueFactory<>("AppointmentDate"));
+		appt_col_time.setCellValueFactory(new PropertyValueFactory<>("AppointmentTime"));
+		appt_col_treatment.setCellValueFactory(new PropertyValueFactory<>("Treatment"));
+		
+		appt_tableView.setItems(appointmentListData);		
+	}
+	
+	public void selectAppointment() {
+		Appointment appointments = appt_tableView.getSelectionModel().getSelectedItem();
+		int num = appt_tableView.getSelectionModel().getSelectedIndex();
+		
+		if((num - 1) < -1) {
+			return;
+		}
+		appointment_treatment.setText(appointments.getTreatment());
+		appointment_date.setValue(LocalDate.parse(String.valueOf(appointments.getAppointmentDate())));
+		
 	}
     
     public void createAppointment() {
@@ -160,9 +234,9 @@ public class HomePage implements Initializable{
     		}
     		else {
     			Patient patient = mainController.getPatient();
-    			int patientId = patient.getPatientId();
-    			
+    			int patientId = patient.getPatientId();    			
     	    	int physicianID = getPhysicianID();
+    	    	
     	    	String checkAppointmentSql = "SELECT * FROM appointment where appointment_date = ? AND appointment_time = ? AND physician_id = ?";
     	    	prepare = connect.prepareStatement(checkAppointmentSql);
     	    	prepare.setString(1, String.valueOf(appointment_date.getValue()));
@@ -189,6 +263,7 @@ public class HomePage implements Initializable{
             		alert.setContentText("You have created an appointment!");
             		alert.showAndWait();
             		prepare.executeUpdate();
+            		showAppointments();
             		clearAppointment();  	    			
     	    	}
     		}
@@ -233,11 +308,12 @@ public class HomePage implements Initializable{
     			}
     			if(appointPatientIdExists) {
         			prepare = connect.prepareStatement(sql);
-        			prepare.executeUpdate();
         	   		Alert alert = new Alert(AlertType.INFORMATION);
     	    		alert.setTitle("Appointment Updated");
         			alert.setContentText("You have updated your appointment!");
         			alert.showAndWait();
+        			prepare.executeUpdate();
+        			showAppointments();
         			clearAppointment();
     			}
     			else {
@@ -283,11 +359,13 @@ public class HomePage implements Initializable{
     			}			
     			if(appointPatientIdExists) {
     				prepare = connect.prepareStatement(sql);
-        			prepare.executeUpdate();
         	   		Alert alert = new Alert(AlertType.INFORMATION);
     	    		alert.setTitle("Appointment deleted");
         			alert.setContentText("You have deleted your appointment!");
         			alert.showAndWait();
+        			
+        			prepare.executeUpdate();
+        			showAppointments();
         			clearAppointment();
     			}
     			else {
@@ -355,9 +433,7 @@ public class HomePage implements Initializable{
     			alert.showAndWait();
     		}
     		else {	
-   
-    			
-        			prepare = connect.prepareStatement(sql);
+    				prepare = connect.prepareStatement(sql);
         			prepare.executeUpdate();
         	   		Alert alert = new Alert(AlertType.INFORMATION);
     	    		alert.setTitle("Account Updated");
@@ -366,6 +442,9 @@ public class HomePage implements Initializable{
         			setUserInfo(patientId, profile_name.getText(), profile_email.getText(), profile_username.getText(), 
         					profile_password.getText(), profile_phoneNum.getText(), String.valueOf(profile_dob.getValue()), 
         					(String)profile_gender.getSelectionModel().getSelectedItem());
+        			patient.updatePatientInfo(profile_name.getText(), profile_email.getText(), profile_username.getText(), 
+        					profile_password.getText(), profile_phoneNum.getText(), String.valueOf(profile_dob.getValue()), 
+        					(String)profile_gender.getSelectionModel().getSelectedItem()); 
         			clearPatientInfo();   				
     		}
     	}
@@ -381,52 +460,38 @@ public class HomePage implements Initializable{
        	String sql = "DELETE FROM patient where patient_id = '" + patientId + "'";
        	connect = Database.connectDB();
     	try {
-    		if(profile_name.getText().isEmpty() || profile_email.getText().isEmpty() 
-    				|| profile_username.getText().isEmpty() || profile_password.getText().isEmpty()  
-    				|| profile_phoneNum.getText().isEmpty() || profile_dob.getValue() == null  
-    				|| profile_gender.getSelectionModel().getSelectedItem() == null) {
-    			Alert alert = new Alert(AlertType.ERROR);
-    			alert.setTitle("Missing fields");
-    			alert.setContentText("Please make sure all fields are not blank");
-    			alert.showAndWait();
-    		}
-    		else {
-	
-    				Alert confirmDeletion = new Alert(AlertType.CONFIRMATION);
-    				confirmDeletion.setContentText("This will permanently delete your account. Would you like to proceed?");
-    				Optional<ButtonType> deleteOption = confirmDeletion.showAndWait();
-    				if(deleteOption.get().equals(ButtonType.OK)) {
-    					
-    					String checkAppointmentSql = "SELECT * FROM appointment where patient_id = ?";
-        	    		prepare = connect.prepareStatement(checkAppointmentSql);
-        	    		prepare.setString(1, String.valueOf(patientId));
-        	    		result = prepare.executeQuery();
+    		Alert confirmDeletion = new Alert(AlertType.CONFIRMATION);
+    		confirmDeletion.setTitle("Awaiting confirmation");
+    		confirmDeletion.setContentText("This will permanently delete your account. Would you like to proceed?");
+    		Optional<ButtonType> deleteOption = confirmDeletion.showAndWait();
+    		if(deleteOption.get().equals(ButtonType.OK)) {
+    			String checkAppointmentSql = "SELECT * FROM appointment where patient_id = ?";
+    			prepare = connect.prepareStatement(checkAppointmentSql);
+        	    prepare.setString(1, String.valueOf(patientId));
+        	    result = prepare.executeQuery();
         	    		
-        	    		if(result.next()) {
-        	    	       	String deleteAppointment = "DELETE FROM appointment where patient_id = '" + patientId + "'";
-        	    	    	prepare = connect.prepareStatement(deleteAppointment);
-                			prepare.executeUpdate();
-        	    		}
+        	    if(result.next()) {
+        	    	String deleteAppointment = "DELETE FROM appointment where patient_id = '" + patientId + "'";
+        	    	prepare = connect.prepareStatement(deleteAppointment);
+                	prepare.executeUpdate();
+        	    }
         	    		
-    					prepare = connect.prepareStatement(sql);
-            			prepare.executeUpdate();
-            	   		Alert alert = new Alert(AlertType.INFORMATION);
-        	    		alert.setTitle("Account deleted");
-            			alert.setContentText("You have deleted your account!");
-            			alert.showAndWait();
+    			prepare = connect.prepareStatement(sql);
+            	prepare.executeUpdate();
+            	Alert alert = new Alert(AlertType.INFORMATION);
+        	    alert.setTitle("Account deleted");
+            	alert.setContentText("You have deleted your account!");
+            	alert.showAndWait();
 
-            			profile_deleteBtn.getScene().getWindow().hide();
+            	profile_deleteBtn.getScene().getWindow().hide();
             			
-            			Parent root = FXMLLoader.load(getClass().getResource("LoginPage.fxml"));
-        				Stage stage = new Stage();
-        				Scene scene = new Scene(root);
-        				stage.setScene(scene);
-        				stage.show();     			
-    				}
-    			
-    			 	
-    			
-    		}
+            	Parent root = FXMLLoader.load(getClass().getResource("LoginPage.fxml"));
+        		Stage stage = new Stage();
+        		Scene scene = new Scene(root);
+        		stage.setScene(scene);
+        		stage.show();     			
+    		}		
+    		
     	}
     	catch (Exception e) {
     		e.printStackTrace();
@@ -440,23 +505,22 @@ public class HomePage implements Initializable{
     	profile_password.setText("");
     	profile_phoneNum.setText("");
     	profile_dob.setValue(null);
-    	profile_gender.getSelectionModel().clearSelection();
-    	
-
+    	profile_gender.getSelectionModel().clearSelection();  	
     }
     
     public void switchForm(ActionEvent event) {
     	if(event.getSource() == appointmentBtn) {
     		appointment_form.setVisible(true);
     		profile_form.setVisible(false);
-    		userInfo_form.setVisible(false);
-    		
+    		userInfo_form.setVisible(false);    		
     		appointmentTimeList();
+    		appointmentPhysicianList();
     	}
     	else if(event.getSource() == editProfileBtn) {
     		profile_form.setVisible(true);
     		appointment_form.setVisible(false);
     		userInfo_form.setVisible(false);
+    		genderList();
     	}
     	else if(event.getSource() == viewProfileBtn) {
     		userInfo_form.setVisible(true);
@@ -540,6 +604,7 @@ public class HomePage implements Initializable{
 		appointmentPhysicianList();
 		genderList();
 		
+		showAppointments();
 	}
 
 
