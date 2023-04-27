@@ -37,7 +37,7 @@
                <left>
                   <AnchorPane prefHeight="200.0" prefWidth="220.0" style="-fx-background-color: red;" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="appointmentBtn" layoutX="32.0" layoutY="323.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="157.0" text="Add Appointment" />
+                        <Button fx:id="appointmentBtn" layoutX="32.0" layoutY="323.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="157.0" text="Appointments" />
                         <Button fx:id="editProfileBtn" layoutX="32.0" layoutY="265.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="36.0" prefWidth="157.0" text="Edit Profile" />
                         <Text fill="WHITE" layoutX="39.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome!">
                            <font>
