@@ -83,6 +83,21 @@ public class HomePage implements Initializable{
 
     @FXML
     private AnchorPane appointment_form;
+    
+    @FXML
+    private AnchorPane updateAppt_form;
+
+    @FXML
+    private DatePicker appointment_newDate;
+
+    @FXML
+    private ChoiceBox<?> appointment_newPhys;
+
+    @FXML
+    private ChoiceBox<?> appointment_newTime;
+
+    @FXML
+    private TextArea appointment_newTreatment;
 
     @FXML
     private ChoiceBox<?> appointment_time;
@@ -95,6 +110,9 @@ public class HomePage implements Initializable{
 
     @FXML
     private Button appointment_updateBtn;
+    
+    @FXML
+    private Button appointment_updateBtn1;
 
     @FXML
     private Button logoutBtn;
@@ -281,15 +299,14 @@ public class HomePage implements Initializable{
     	}
     }
     
-    public void updateAppointment() {
-    	connect = Database.connectDB();
+    public void showUpdateApptForm() {
     	Patient patient = mainController.getPatient();
 		int patientId = patient.getPatientId();
     	int physicianID = getPhysicianID();
-
-    	String updateAppointmentSql = "UPDATE appointment SET physician_id = ?, appointment_date = ?, appointment_time = ?, treatment = ? "
-    			+ "WHERE patient_id = ? AND appointment_date = ? AND appointment_time = ? AND physician_id = ?";
     	
+    	String checkAppointmentSql = "SELECT * FROM appointment WHERE patient_id = ? AND appointment_date = ? AND appointment_time = ? AND physician_id = ? AND treatment = ?";
+    	connect = Database.connectDB();
+  	
     	try {
     		if(appointment_physician.getSelectionModel().getSelectedItem() == null || appointment_date.getValue() == null 
     				|| appointment_time.getSelectionModel().getSelectedItem() == null || appointment_treatment.getText().isEmpty()) {
@@ -298,26 +315,72 @@ public class HomePage implements Initializable{
     			alert.setContentText("Please make sure all fields are not blank");
     			alert.showAndWait();
     		}
-    		else {	
-    			
-    	    	String checkAppointmentSql = "SELECT * FROM appointment WHERE patient_id = ? AND appointment_date = ? AND appointment_time = ? AND physician_id = ?";
+    		else {				
     	    	prepare = connect.prepareStatement(checkAppointmentSql);
     	    	prepare.setInt(1, patientId);
 				prepare.setString(2, String.valueOf(appointment_date.getValue()));
     	    	prepare.setString(3, (String)appointment_time.getSelectionModel().getSelectedItem());
     	    	prepare.setInt(4, physicianID);
+    	    	prepare.setString(5, appointment_treatment.getText());
     	    	result = prepare.executeQuery();
     	    	
     			if(result.next()) { //checks if an appointment exists for that patient with that date, time, and physician
+    				clearUpdatedAppointment();
+    		    	updateAppt_form.setVisible(true);
+    			}
+    			else {
+    				Alert alert = new Alert(AlertType.ERROR);
+    	    		alert.setTitle("Appointment does not exist");
+        			alert.setContentText("Please enter or select your appointment listed on the table to update");
+        			alert.showAndWait();
+    			} 			
+    		}
+    	}
+    	catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    }
+    	
+    
+    
+    public void updateAppointment() {
+    	int newPhysicianID = getUpdatedPhysicianID();
+    	int appointmentId = getAppointmentID();
+    	
+    	String updateAppointmentSql = "UPDATE appointment SET physician_id = ?, appointment_date = ?, appointment_time = ?, treatment = ? "
+    			+ "WHERE appointment_id = ?";
+    	connect = Database.connectDB();
+
+    	
+    	try {
+    		if(appointment_newPhys.getSelectionModel().getSelectedItem() == null || appointment_newDate.getValue() == null 
+    				|| appointment_newTime.getSelectionModel().getSelectedItem() == null || appointment_newTreatment.getText().isEmpty()) {
+    			Alert alert = new Alert(AlertType.ERROR);
+    			alert.setTitle("Missing fields");
+    			alert.setContentText("Please make sure all fields are not blank");
+    			alert.showAndWait();
+    		}
+    		else {	  			
+    	    	String checkAppointmentSql = "SELECT * FROM appointment WHERE appointment_date = ? AND appointment_time = ? AND physician_id = ?";
+    	    	prepare = connect.prepareStatement(checkAppointmentSql);
+				prepare.setString(1, String.valueOf(appointment_newDate.getValue()));
+    	    	prepare.setString(2, (String)appointment_newTime.getSelectionModel().getSelectedItem());
+    	    	prepare.setInt(3, newPhysicianID);
+    	    	result = prepare.executeQuery();
+    	    	
+    			if(result.next()) { //checks if an appointment already exists with that date, time, and physician
+    				Alert alert = new Alert(AlertType.ERROR);
+            		alert.setTitle("Failed to update Appointment");
+            		alert.setContentText("Sorry! This appointment date and time is already taken with that physician!");
+            		alert.showAndWait();
+    			}
+    			else {           		            
         			prepare = connect.prepareStatement(updateAppointmentSql);
-        	    	prepare.setInt(1, physicianID);
-    				prepare.setString(2, String.valueOf(appointment_date.getValue()));
-        	    	prepare.setString(3, (String)appointment_time.getSelectionModel().getSelectedItem());
-        	    	prepare.setString(4, appointment_treatment.getText());
-        	    	prepare.setInt(5, patientId);
-        	    	prepare.setString(6, String.valueOf(appointment_date.getValue()));
-        	    	prepare.setString(7, (String)appointment_time.getSelectionModel().getSelectedItem());
-        	    	prepare.setInt(8, physicianID);
+        	    	prepare.setInt(1, newPhysicianID);
+    				prepare.setString(2, String.valueOf(appointment_newDate.getValue()));
+        	    	prepare.setString(3, (String)appointment_newTime.getSelectionModel().getSelectedItem());
+        	    	prepare.setString(4, appointment_newTreatment.getText());
+        	    	prepare.setInt(5, appointmentId);
 
         	   		Alert alert = new Alert(AlertType.INFORMATION);
     	    		alert.setTitle("Appointment Updated");
@@ -326,12 +389,8 @@ public class HomePage implements Initializable{
         			prepare.executeUpdate();
         			showAppointments();
         			clearAppointment();
-    			}
-    			else {
-    				Alert alert = new Alert(AlertType.ERROR);
-    	    		alert.setTitle("Appointment does not exist");
-        			alert.setContentText("Cannot update because appointment does not exist");
-        			alert.showAndWait();
+    		    	updateAppt_form.setVisible(false);
+
     			} 			
     		}
     	}
@@ -365,7 +424,7 @@ public class HomePage implements Initializable{
     	    	prepare.setInt(4, physicianID);
     	    	result = prepare.executeQuery();
 
-    			if(result.next()) { //checks if an appointment exists for that patient with that date, time, and physician
+    			if(result.next()) { //checks if an appointment exists for that patient with that date, time, and physician   				
     				prepare = connect.prepareStatement(deleteAppointmentSql);
     				prepare.setInt(1, patientId);
     				prepare.setString(2, String.valueOf(appointment_date.getValue()));
@@ -383,7 +442,7 @@ public class HomePage implements Initializable{
     			else {
     				Alert alert = new Alert(AlertType.ERROR);
     	    		alert.setTitle("Appointment does not exist");
-        			alert.setContentText("Cannot delete because appointment does not exist");
+        			alert.setContentText("Please enter or select your appointment listed on the table to delete");
         			alert.showAndWait();
     			} 	
     			
@@ -395,22 +454,34 @@ public class HomePage implements Initializable{
     }
     
     
-    public void clearAppointment() {
+    public void clearAppointment() {	
     	appointment_date.setValue(null);
     	appointment_time.getSelectionModel().clearSelection();
     	appointment_physician.getSelectionModel().clearSelection();
     	appointment_treatment.setText("");;
-
+    }
+    
+    public void clearUpdatedAppointment() {
+    	appointment_newDate.setValue(null);
+    	appointment_newTime.getSelectionModel().clearSelection();
+    	appointment_newPhys.getSelectionModel().clearSelection();
+    	appointment_newTreatment.setText("");;
+    }
+    
+    public void cancelUpdateAppt() {
+		clearAppointment();
+    	updateAppt_form.setVisible(false);
     }
     
     
+    
     public void updatePatientInfo() {
-       	connect = Database.connectDB();
     	Patient patient = mainController.getPatient();
 		int patientId = patient.getPatientId();
 		
     	String updatePatientSql = "UPDATE patient SET name = ?, email = ?, username = ?, password = ?, phoneNumber = ?, dateOfBirth = ?, gender = ? WHERE patient_id = ?";
-    	
+       	connect = Database.connectDB();
+
     	try {
     		if(profile_name.getText().isEmpty() || profile_email.getText().isEmpty() 
     				|| profile_username.getText().isEmpty() || profile_password.getText().isEmpty()  
@@ -582,6 +653,47 @@ public class HomePage implements Initializable{
 		return 0;
     }
     
+    //gets the physician id from selected physician choice box
+    public int getUpdatedPhysicianID() {
+    	String sql = "SELECT physician_id FROM physician WHERE name = ?";
+		try {
+			prepare = connect.prepareStatement(sql);
+    		prepare.setString(1, (String)appointment_newPhys.getSelectionModel().getSelectedItem());
+    		result = prepare.executeQuery();
+    		if(result.next())
+    		{
+    			int physicianID = result.getInt("physician_id");
+        		return physicianID;
+    		}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+    }
+    
+    //gets the appointment id 
+    public int getAppointmentID() {
+    	Patient patient = mainController.getPatient();
+		int patientId = patient.getPatientId();
+    	int physicianID = getPhysicianID();
+    	String sql = "SELECT appointment_id FROM appointment WHERE patient_id = ? AND appointment_date = ? AND appointment_time = ? AND physician_id = ?";
+		try {
+			prepare = connect.prepareStatement(sql);
+ 	    	prepare.setInt(1, patientId);
+			prepare.setString(2, String.valueOf(appointment_date.getValue()));
+    	    prepare.setString(3, (String)appointment_time.getSelectionModel().getSelectedItem());
+    	    prepare.setInt(4, physicianID);    		result = prepare.executeQuery();
+    		if(result.next())
+    		{
+    			int appointmetnId = result.getInt("appointment_id");
+        		return appointmetnId;
+    		}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+    }
+    
     // lists for choice box
     public void appointmentTimeList() {
     	List<String> timeList = new ArrayList<>();
@@ -591,6 +703,7 @@ public class HomePage implements Initializable{
     	}
     	ObservableList listData = FXCollections.observableArrayList(timeList);
     	appointment_time.setItems(listData);
+    	appointment_newTime.setItems(listData);
     }
     
     public void genderList() {
@@ -607,6 +720,7 @@ public class HomePage implements Initializable{
     	List<String> physicianList = getPhysicians();
     	ObservableList listData = FXCollections.observableArrayList(physicianList);
     	appointment_physician.setItems(listData);
+    	appointment_newPhys.setItems(listData);
     }
     
     //sets user info in the view profile screen
