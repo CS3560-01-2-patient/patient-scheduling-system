@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -137,7 +139,7 @@ public class HomePage implements Initializable{
     private TableColumn<Appointment, String> appt_col_date;
 
     @FXML
-    private TableColumn<Appointment, Integer> appt_col_patientId;
+    private TableColumn<Appointment, String> appt_col_patient;
 
     @FXML
     private TableColumn<Appointment, String> appt_col_physician;
@@ -168,29 +170,30 @@ public class HomePage implements Initializable{
 	}
 	
 	public ObservableList<Appointment> appointmentDataList(){
-		
-		ObservableList<Appointment> listData = FXCollections.observableArrayList();
-		
-		String sql = "SELECT * FROM appointment";
-		
-		connect = Database.connectDB();
-		try {
-			prepare = connect.prepareStatement(sql);
-			result = prepare.executeQuery();
-			
-			Appointment appointments;
-			
-			while(result.next()) {
-				appointments = new Appointment(result.getInt("appointment_id"), result.getInt("patient_id"),
-						result.getInt("physician_id"), result.getString("appointment_date"), result.getString("appointment_time"), 
-								result.getString("treatment"));
-				listData.add(appointments);
-			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return listData;
+	    ObservableList<Appointment> listData = FXCollections.observableArrayList();
+	    
+	    String sql = "SELECT a.*, p.name AS physician_name FROM appointment a JOIN physician p ON a.physician_id = p.physician_id";
+	    
+	    connect = Database.connectDB();
+	    try {
+	        prepare = connect.prepareStatement(sql);
+	        result = prepare.executeQuery();
+	        
+	        Appointment appointments;
+	        
+	        while(result.next()) {
+	        	Patient patient = new Patient(result.getInt("patient_id"));
+	            Physician physician = new Physician(result.getInt("physician_id"));
+	            appointments = new Appointment(result.getInt("appointment_id"), patient,
+	                    physician, result.getString("appointment_date"), result.getString("appointment_time"), 
+	                            result.getString("treatment"));
+	            listData.add(appointments);
+	        }
+	    }
+	    catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return listData;
 	}
 	
 	private ObservableList<Appointment> appointmentListData;
@@ -198,8 +201,8 @@ public class HomePage implements Initializable{
 	public void showAppointments() {
 		appointmentListData = appointmentDataList();
 		
-		appt_col_patientId.setCellValueFactory(new PropertyValueFactory<>("patientId"));
-		appt_col_physician.setCellValueFactory(new PropertyValueFactory<>("PhysicianId"));
+		appt_col_patient.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPatient().getName()));
+		appt_col_physician.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPhysician().getName()));
 		appt_col_date.setCellValueFactory(new PropertyValueFactory<>("AppointmentDate"));
 		appt_col_time.setCellValueFactory(new PropertyValueFactory<>("AppointmentTime"));
 		appt_col_treatment.setCellValueFactory(new PropertyValueFactory<>("Treatment"));

@@ -105,7 +105,7 @@
                                        <children>
                                           <TableView fx:id="appt_tableView" onMouseClicked="#selectAppointment" prefHeight="516.0" prefWidth="491.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <columns>
-                                              <TableColumn fx:id="appt_col_patientId" prefWidth="75.0" text="Patient ID" />
+                                              <TableColumn fx:id="appt_col_patient" prefWidth="75.0" text="Patient" />
                                               <TableColumn fx:id="appt_col_physician" prefWidth="75.0" text="Physician" />
                                                 <TableColumn fx:id="appt_col_date" prefWidth="102.0" text="Appt. Date" />
                                                 <TableColumn fx:id="appt_col_time" minWidth="0.0" prefWidth="105.0" text="Appt. Time" />
