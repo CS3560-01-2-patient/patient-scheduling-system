@@ -140,7 +140,7 @@ public class HomePage implements Initializable{
     private TableColumn<Appointment, Integer> appt_col_patientId;
 
     @FXML
-    private TableColumn<Appointment, String> appt_col_physician;
+    private TableColumn<Appointment, Integer> appt_col_physician;
 
     @FXML
     private TableColumn<Appointment, String> appt_col_time;
@@ -151,8 +151,7 @@ public class HomePage implements Initializable{
     @FXML
     private TableView<Appointment> appt_tableView;
     
-    private Main mainController;
-     
+    private Main mainController;      
     
     private String gender[] = {"Male", "Female", "Other"};
     private String appointmentTime[]  = {"9:00AM", "10:00AM", "11:00AM", "12:00PM", "1:00PM", "2:00PM", "3:00PM", "4:00PM", "5:00PM"};
@@ -162,14 +161,15 @@ public class HomePage implements Initializable{
     private ResultSet result;
     private Statement statement;
     
-
+    //sets the reference to the Main class to access its methods
 	public  void setMainController(Main mainController) {
 		this.mainController = mainController;	
 	}
 	
+	//adds all the rows in appointment database to appointmentListData
 	public ObservableList<Appointment> appointmentDataList(){
 		
-		ObservableList<Appointment> listData = FXCollections.observableArrayList();
+		ObservableList<Appointment> appointmentListData = FXCollections.observableArrayList();
 		
 		String sql = "SELECT * FROM appointment";
 		
@@ -180,37 +180,41 @@ public class HomePage implements Initializable{
 			
 			Appointment appointments;
 			
+			//Appointment object created for each row 
 			while(result.next()) {
 				appointments = new Appointment(result.getInt("appointment_id"), result.getInt("patient_id"),
 						result.getInt("physician_id"), result.getString("appointment_date"), result.getString("appointment_time"), 
 								result.getString("treatment"));
-				listData.add(appointments);
+				appointmentListData.add(appointments);
 			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		return listData;
+		return appointmentListData;
 	}
 	
 	private ObservableList<Appointment> appointmentListData;
 	
+	//retrieves list of Appointment objects and set ups table columns
 	public void showAppointments() {
 		appointmentListData = appointmentDataList();
 		
-		appt_col_patientId.setCellValueFactory(new PropertyValueFactory<>("patientId"));
-		appt_col_physician.setCellValueFactory(new PropertyValueFactory<>("PhysicianId"));
-		appt_col_date.setCellValueFactory(new PropertyValueFactory<>("AppointmentDate"));
-		appt_col_time.setCellValueFactory(new PropertyValueFactory<>("AppointmentTime"));
-		appt_col_treatment.setCellValueFactory(new PropertyValueFactory<>("Treatment"));
+		appt_col_patientId.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("patientId"));
+		appt_col_physician.setCellValueFactory(new PropertyValueFactory<Appointment, Integer>("PhysicianId"));
+		appt_col_date.setCellValueFactory(new PropertyValueFactory<Appointment, String>("AppointmentDate"));
+		appt_col_time.setCellValueFactory(new PropertyValueFactory<Appointment, String>("AppointmentTime"));
+		appt_col_treatment.setCellValueFactory(new PropertyValueFactory<Appointment, String>("Treatment"));
 		
 		appt_tableView.setItems(appointmentListData);		
 	}
 	
+	//gets the selected Appointment object from the table
 	public void selectAppointment() {
 		Appointment appointments = appt_tableView.getSelectionModel().getSelectedItem();
 		int num = appt_tableView.getSelectionModel().getSelectedIndex();
 		
+		//checks if no appointment is selected
 		if((num - 1) < -1) {
 			return;
 		}
@@ -219,13 +223,13 @@ public class HomePage implements Initializable{
 		
 	}
     
+	
     public void createAppointment() {
     	String sql = "INSERT INTO appointment (patient_id, physician_id, appointment_date, appointment_time, treatment) VALUES (?, ?, ?, ?, ?)";
     	connect = Database.connectDB();
     	
     	try {
-    		if(appointment_physician.getSelectionModel().getSelectedItem() == null 
-    				|| appointment_physician.getSelectionModel().getSelectedItem() == null || appointment_date.getValue() == null 
+    		if(appointment_physician.getSelectionModel().getSelectedItem() == null || appointment_date.getValue() == null 
     				|| appointment_time.getSelectionModel().getSelectedItem() == null || appointment_treatment.getText().isEmpty()) {
     			Alert alert = new Alert(AlertType.ERROR);
     			alert.setTitle("Missing fields");
@@ -283,8 +287,7 @@ public class HomePage implements Initializable{
     			+ "WHERE patient_id = ? AND appointment_date = ? AND appointment_time = ? AND physician_id = ?";
     	
     	try {
-    		if(appointment_physician.getSelectionModel().getSelectedItem() == null 
-    				|| appointment_physician.getSelectionModel().getSelectedItem() == null || appointment_date.getValue() == null 
+    		if(appointment_physician.getSelectionModel().getSelectedItem() == null || appointment_date.getValue() == null 
     				|| appointment_time.getSelectionModel().getSelectedItem() == null || appointment_treatment.getText().isEmpty()) {
     			Alert alert = new Alert(AlertType.ERROR);
     			alert.setTitle("Missing fields");
@@ -345,16 +348,14 @@ public class HomePage implements Initializable{
        	connect = Database.connectDB();
        
     	try {
-    		if(appointment_physician.getSelectionModel().getSelectedItem() == null 
-    				|| appointment_physician.getSelectionModel().getSelectedItem() == null || appointment_date.getValue() == null 
+    		if(appointment_physician.getSelectionModel().getSelectedItem() == null || appointment_date.getValue() == null 
     				|| appointment_time.getSelectionModel().getSelectedItem() == null || appointment_treatment.getText().isEmpty()) {
     			Alert alert = new Alert(AlertType.ERROR);
     			alert.setTitle("Missing fields");
     			alert.setContentText("Please make sure all fields are not blank");
     			alert.showAndWait();
     		}
-    		else {
-    			
+    		else {  			
     	    	String checkAppointmentSql = "SELECT * FROM appointment WHERE patient_id = ? AND appointment_date = ? AND appointment_time = ? AND physician_id = ?";
     	    	prepare = connect.prepareStatement(checkAppointmentSql);
     	    	prepare.setInt(1, patientId);
@@ -363,8 +364,6 @@ public class HomePage implements Initializable{
     	    	prepare.setInt(4, physicianID);
     	    	result = prepare.executeQuery();
 
-    	    	
-   		
     			if(result.next()) {
     				prepare = connect.prepareStatement(sql);
     				prepare.setInt(1, patientId);

@@ -101,12 +101,13 @@ public class Main extends Application {
 		}
 	}
 	
+	// patient clicks login button
     public void login() {
-    	String sql = "SELECT * FROM patient WHERE username = ? and password = ?";
+    	String getUsernameAndPwdSql = "SELECT * FROM patient WHERE username = ? and password = ?";
     	connect = Database.connectDB();
     	
     	try {
-    		prepare = connect.prepareStatement(sql);
+    		prepare = connect.prepareStatement(getUsernameAndPwdSql);
     		prepare.setString(1, usernameTextField.getText());
     		prepare.setString(2, passwordTextField.getText());
     		result = prepare.executeQuery();
@@ -119,17 +120,18 @@ public class Main extends Application {
     			alert.showAndWait();
     		}
     		else {
-    			if(result.next()) {
+    			if(result.next()) { //checks if username and password is in patient database
     				FXMLLoader loader = new FXMLLoader(getClass().getResource("HomePage.fxml"));
     				Parent root = loader.load();
     				HomePage homepage = loader.getController();
     				homepage.setMainController(this);
     				
-    	 			String sql1 = "SELECT * FROM patient WHERE username = ?";	
-	    			prepare = connect.prepareStatement(sql1);
+    	 			String getUserInfoSql = "SELECT * FROM patient WHERE username = ?";	
+	    			prepare = connect.prepareStatement(getUserInfoSql);
 	        		prepare.setString(1, usernameTextField.getText());
 	        		result = prepare.executeQuery();
-	        		while(result.next()) {
+	        		
+	        		if(result.next()) { 
 	        			int patient_id = result.getInt("patient_id");
 	        			String name = result.getString("name");
 	        			String email = result.getString("email");
@@ -141,6 +143,7 @@ public class Main extends Application {
 		        		homepage.setUserInfo(patient_id, name, email, username, password, phoneNumber, dateOfBirth, gender);
 		        		myPatient = new Patient(patient_id, name, email, username, password, phoneNumber, dateOfBirth, gender);
 	        		}
+	        		
     				alert = new Alert(AlertType.INFORMATION);
     				alert.setTitle("Information Message");
     				alert.setHeaderText(null);
@@ -168,13 +171,10 @@ public class Main extends Application {
     	}
     }
     
-    public Patient getPatient() {
-    	return myPatient;
-    }
     
-    
+    // patient clicks create account button from create account screen
     public void createAccount() {
-    	String sql = "INSERT INTO patient (name, email, username, password, phoneNumber, dateOfBirth, gender) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    	String createAccountSql = "INSERT INTO patient (name, email, username, password, phoneNumber, dateOfBirth, gender) VALUES (?, ?, ?, ?, ?, ?, ?)";
     	connect = Database.connectDB();
 		ToggleGroup toggleGroup = new ToggleGroup();
 		maleRB.setToggleGroup(toggleGroup);
@@ -184,36 +184,35 @@ public class Main extends Application {
 		
     	try {
     		Alert alert;
-        	LocalDate date = createAccountDob.getValue();
 			String gender = ((RadioButton) toggleGroup.getSelectedToggle()).getText();
-    		if(createAccountName.getText().isEmpty() || createAccountEmail.getText().isEmpty() || createAccountUsername.getText().isEmpty() || createAccountPassword.getText().isEmpty() || createAccountPhone.getText().isEmpty() || date == null) { 
+    		if(createAccountName.getText().isEmpty() || createAccountEmail.getText().isEmpty() || createAccountUsername.getText().isEmpty() || createAccountPassword.getText().isEmpty() || createAccountPhone.getText().isEmpty() || createAccountDob.getValue() == null) { 
     			alert = new Alert(AlertType.ERROR);
     			alert.setTitle("Error");
     			alert.setContentText("Please fill all blank fields");	
     			alert.showAndWait();
     		}
     		else {
+    			String checkUsernameExistsSql = ("SELECT * FROM patient WHERE username = ?");
+    			prepare = connect.prepareStatement(checkUsernameExistsSql);
+    			prepare.setString(1, createAccountUsername.getText());
+    			result = prepare.executeQuery();
     			
-    			PreparedStatement psCheckUserExists = connect.prepareStatement("SELECT * FROM patient WHERE username = ?");
-    			psCheckUserExists.setString(1, createAccountUsername.getText());
-    			ResultSet resultSet = psCheckUserExists.executeQuery();
-    			
-    			if(resultSet.isBeforeFirst()) {
+    			if(result.next()) { //check if username already exists in database
     				alert = new Alert(Alert.AlertType.ERROR);
         			alert.setTitle("Username already exists!");
     				alert.setContentText("You cannot use this username.");
     				alert.showAndWait();
     			}
     			else {
-    				String dateOfBirth = date.toString();
-        			prepare = connect.prepareStatement(sql);
+        			prepare = connect.prepareStatement(createAccountSql);
         			prepare.setString(1, createAccountName.getText());
         			prepare.setString(2, createAccountEmail.getText());
         			prepare.setString(3, createAccountUsername.getText());
         			prepare.setString(4, createAccountPassword.getText());
         			prepare.setString(5, createAccountPhone.getText());
-        			prepare.setString(6, dateOfBirth);
+        			prepare.setString(6, String.valueOf(createAccountDob.getValue()));
         			prepare.setString(7, gender);
+        			
         			    			
         			alert = new Alert(AlertType.INFORMATION);
         			alert.setTitle("Account Created");
@@ -231,6 +230,12 @@ public class Main extends Application {
     	}
     }
     
+    //call to retrieve the reference to myPatient object
+    public Patient getPatient() {
+    	return myPatient;
+    }
+    
+    // switches to create account screen
     public void createAccountView() {
     	left_form.setVisible(false);
     	login_form.setVisible(false);
@@ -239,6 +244,7 @@ public class Main extends Application {
 
     }
     
+    // switches to login screen
     public void loginView() {
     	left_form.setVisible(true);
     	login_form.setVisible(true);
