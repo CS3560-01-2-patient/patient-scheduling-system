@@ -244,7 +244,7 @@ public class HomePage implements Initializable{
 		
 	}
     
-	
+	//patient clicks create appointment button
     public void createAppointment() {
     	String createAppointmentSql = "INSERT INTO appointment (patient_id, physician_id, appointment_date, appointment_time, treatment) VALUES (?, ?, ?, ?, ?)";
     	connect = Database.connectDB();
@@ -299,6 +299,7 @@ public class HomePage implements Initializable{
     	}
     }
     
+	//patient clicks update appointment button
     public void showUpdateApptForm() {
     	Patient patient = mainController.getPatient();
 		int patientId = patient.getPatientId();
@@ -342,7 +343,7 @@ public class HomePage implements Initializable{
     }
     	
     
-    
+    //patient clicks update appointment button from update appointment screen
     public void updateAppointment() {
     	int newPhysicianID = getUpdatedPhysicianID();
     	int appointmentId = getAppointmentID();
@@ -398,6 +399,7 @@ public class HomePage implements Initializable{
     	}
     }
     
+    //patient clicks delete appointment button 
     public void deleteAppointment() {
     	Patient patient = mainController.getPatient();
 		int patientId = patient.getPatientId();
@@ -453,7 +455,7 @@ public class HomePage implements Initializable{
     	}
     }
     
-    
+    //clears appointment input fields
     public void clearAppointment() {	
     	appointment_date.setValue(null);
     	appointment_time.getSelectionModel().clearSelection();
@@ -473,7 +475,7 @@ public class HomePage implements Initializable{
     	updateAppt_form.setVisible(false);
     }
     
-    
+    //patient clicks update patient button
     public void updatePatientInfo() {
     	Patient patient = mainController.getPatient();
 		int patientId = patient.getPatientId();
@@ -492,6 +494,18 @@ public class HomePage implements Initializable{
     			alert.showAndWait();
     		}
     		else {	
+    			String checkUsernameExistsSql = ("SELECT * FROM patient WHERE username = ?");
+    			prepare = connect.prepareStatement(checkUsernameExistsSql);
+    			prepare.setString(1, profile_username.getText());
+    			result = prepare.executeQuery();
+    			
+    			if(result.next()) { //check if username already exists in database
+    				Alert alert = new Alert(Alert.AlertType.ERROR);
+        			alert.setTitle("Failed to update account information!");
+    				alert.setContentText("Sorry! This username already exists!");
+    				alert.showAndWait();
+    			}
+    			else {
     				prepare = connect.prepareStatement(updatePatientSql);
     				prepare.setString(1, profile_name.getText());
     				prepare.setString(2, profile_email.getText());
@@ -515,7 +529,9 @@ public class HomePage implements Initializable{
         					profile_password.getText(), profile_phoneNum.getText(), String.valueOf(profile_dob.getValue()), 
         					(String)profile_gender.getSelectionModel().getSelectedItem()); 
         			
-        			clearPatientInfo();   				
+        			clearPatientInfo();    				
+    			}
+  				
     		}
     	}
     	catch (Exception e) {
@@ -524,6 +540,7 @@ public class HomePage implements Initializable{
     	
     }
     
+    //patient clicks delete patient button
     public void deletePatient() {
     	Patient patient = mainController.getPatient();
 		int patientId = patient.getPatientId();
@@ -572,6 +589,7 @@ public class HomePage implements Initializable{
     	}
     }
     
+    //clears patient info fields
     public void clearPatientInfo() {
     	profile_name.setText("");
     	profile_email.setText("");

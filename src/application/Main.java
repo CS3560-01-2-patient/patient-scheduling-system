@@ -22,7 +22,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 
 
-
 public class Main extends Application {
 	@FXML
     private Button createAccountBtn;
@@ -101,7 +100,7 @@ public class Main extends Application {
 		}
 	}
 	
-	// patient clicks login button
+	//patient clicks login button
     public void login() {
     	String getUsernameAndPwdSql = "SELECT * FROM patient WHERE username = ? and password = ?";
     	connect = Database.connectDB();
@@ -111,6 +110,7 @@ public class Main extends Application {
     		prepare.setString(1, usernameTextField.getText());
     		prepare.setString(2, passwordTextField.getText());
     		result = prepare.executeQuery();
+    		
     		Alert alert;
     		if(usernameTextField.getText().isEmpty() || passwordTextField.getText().isEmpty()) {
     			alert = new Alert(AlertType.ERROR);
@@ -124,25 +124,19 @@ public class Main extends Application {
     				FXMLLoader loader = new FXMLLoader(getClass().getResource("HomePage.fxml"));
     				Parent root = loader.load();
     				HomePage homepage = loader.getController();
-    				homepage.setMainController(this);
-    				
-    	 			String getUserInfoSql = "SELECT * FROM patient WHERE username = ?";	
-	    			prepare = connect.prepareStatement(getUserInfoSql);
-	        		prepare.setString(1, usernameTextField.getText());
-	        		result = prepare.executeQuery();
+    				homepage.setMainController(this);    				
+    	 	 
+	        		int patient_id = result.getInt("patient_id");
+	        		String name = result.getString("name");
+	        		String email = result.getString("email");
+	        		String username = result.getString("username");
+	        		String password = result.getString("password");
+	        		String phoneNumber = result.getString("phoneNumber");
+	        		String dateOfBirth = result.getString("dateOfBirth");
+	        		String gender= result.getString("gender");
+		        	homepage.setUserInfo(patient_id, name, email, username, password, phoneNumber, dateOfBirth, gender);
+		        	myPatient = new Patient(patient_id, name, email, username, password, phoneNumber, dateOfBirth, gender);
 	        		
-	        		if(result.next()) { 
-	        			int patient_id = result.getInt("patient_id");
-	        			String name = result.getString("name");
-	        			String email = result.getString("email");
-	        			String username = result.getString("username");
-	        			String password = result.getString("password");
-	        			String phoneNumber = result.getString("phoneNumber");
-	        			String dateOfBirth = result.getString("dateOfBirth");
-	        			String gender= result.getString("gender");
-		        		homepage.setUserInfo(patient_id, name, email, username, password, phoneNumber, dateOfBirth, gender);
-		        		myPatient = new Patient(patient_id, name, email, username, password, phoneNumber, dateOfBirth, gender);
-	        		}
 	        		
     				alert = new Alert(AlertType.INFORMATION);
     				alert.setTitle("Information Message");
@@ -159,7 +153,7 @@ public class Main extends Application {
     			}
     			else {
     	 			alert = new Alert(AlertType.ERROR);
-        			alert.setTitle("Error Message");
+        			alert.setTitle("Failed to login!");
         			alert.setHeaderText(null);
         			alert.setContentText("Login details are incorrect!");
         			alert.showAndWait();
@@ -172,7 +166,7 @@ public class Main extends Application {
     }
     
     
-    // patient clicks create account button from create account screen
+    //patient clicks create account button from create account screen
     public void createAccount() {
     	String createAccountSql = "INSERT INTO patient (name, email, username, password, phoneNumber, dateOfBirth, gender) VALUES (?, ?, ?, ?, ?, ?, ?)";
     	connect = Database.connectDB();
@@ -199,8 +193,8 @@ public class Main extends Application {
     			
     			if(result.next()) { //check if username already exists in database
     				alert = new Alert(Alert.AlertType.ERROR);
-        			alert.setTitle("Username already exists!");
-    				alert.setContentText("You cannot use this username.");
+        			alert.setTitle("Failed to create account!");
+    				alert.setContentText("Sorry! This username already exists!");
     				alert.showAndWait();
     			}
     			else {
